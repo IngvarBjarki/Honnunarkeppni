@@ -14,8 +14,7 @@ For use with the Adafruit Motor Shield v2
 
 Servo myservo;  // create servo object to control a servo
 // twelve servo objects can be created on most boards
-
-
+long duration, distance, RightSensor,BackSensor,FrontSensor,LeftSensor;
 
 int pos = 0;    // variable to store the servo position
 
@@ -39,11 +38,18 @@ void setup() {
   myservo.attach(10);  // attaches the servo on pin 9 to the servo
   myservo.write(0);              // tell servo to go to position in variable 'pos'
 
-  pinMode(trigPin, OUTPUT);// set the trig pin to output (Send sound waves)
-  pinMode(echoPin, INPUT);// set the echo pin to input (recieve sound waves)
 
   AFMS.begin(2000);  // create with the default frequency 1.6KHz
   //AFMS.begin(1000);  // OR with a different frequency, say 1KHz
+
+  
+//3skynjarar
+      pinMode(trigPin1, OUTPUT);
+    pinMode(echoPin1, INPUT);
+    pinMode(trigPin2, OUTPUT);
+    pinMode(echoPin2, INPUT);
+    pinMode(trigPin3, OUTPUT);
+    pinMode(echoPin3, INPUT);
 
 
   
@@ -130,3 +136,16 @@ Serial.print ( " CM!");// print out the distance in centimeters.
   }
   */
 }
+
+//3 skynjarar forrit
+    void SonarSensor(int trigPin,int echoPin)
+    {
+    digitalWrite(trigPin, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trigPin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trigPin, LOW);
+    duration = pulseIn(echoPin, HIGH);
+    distance = (duration/2) / 29.1;
+
+    }
