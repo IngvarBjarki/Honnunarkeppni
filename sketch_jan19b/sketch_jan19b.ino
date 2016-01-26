@@ -17,9 +17,15 @@ Servo myservo;  // create servo object to control a servo
 long duration, distance, RightSensor,BackSensor,FrontSensor,LeftSensor;
 
 int pos = 0;    // variable to store the servo position
+//3 skynjarar
 
-#define trigPin 12 // define the pins of your sensor
-#define echoPin 13
+    #define trigPin1 12
+    #define echoPin1 13
+    #define trigPin2 10
+    #define echoPin2 11
+    #define trigPin3 8
+    #define echoPin3 9
+long duration, distance, RightSensor,BackSensor,FrontSensor,LeftSensor;
 
 // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
@@ -91,6 +97,13 @@ void loop() {
     currentTime = millis();
     Serial.println(currentTime);
   }
+
+      SonarSensor(trigPin1, echoPin1);
+    FrontSensor = distance;
+    SonarSensor(trigPin2, echoPin2);
+    LeftSensor = distance;
+    SonarSensor(trigPin3, echoPin3);
+    RightSensor = distance;
   //Serial.println("While lykkju er lokid");
  /* uint8_t i;
    long duration, distance; // start the scan
