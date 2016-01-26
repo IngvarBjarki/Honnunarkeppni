@@ -40,12 +40,12 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
 
   myservo.attach(10);  // attaches the servo on pin 9 to the servo
   myservo.write(70);              // tell servo to go to position in variable 'pos'
-    AFMS.begin(2000);  // create with the default frequency 1.6KHz
+  AFMS.begin(2000);  // create with the default frequency 1.6KHz
   //AFMS.begin(1000);  // OR with a different frequency, say 1KHz
 
   // Set the speed to start, from 0 (off) to 255 (max speed)
   myMotor->setSpeed(75);
-   myMotor2->setSpeed(75);
+  myMotor2->setSpeed(75);
   myMotor->run(FORWARD);
   myMotor2->run(FORWARD);
   // turn on motor
@@ -53,7 +53,8 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
   myMotor2->run(RELEASE);
 
     while(1){
-        serial.print("while lykkja 1");
+
+        Serial.println("while lykkja 1");
         myMotor->run(FORWARD);
         myMotor2->run(FORWARD);
         SonarSensor(trigPin2, echoPin2);
@@ -70,7 +71,7 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
             }
     }
     while(1){
-           serial.print("while lykkja 2");
+         Serial.println("while lykkja 2");
           SonarSensor(trigPin1, echoPin1);
           FrontSensor = distance;
            myMotor->run(BACKWARD);
@@ -87,7 +88,7 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
     }
 
     while(1){
-           serial.print("while lykkja 1");
+         Serial.println("while lykkja 1");
           SonarSensor(trigPin1, echoPin1);
           FrontSensor = distance;
           myMotor->run(FORWARD);
