@@ -58,6 +58,9 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
     if (LeftSensor < 50) {
         myMotor->setSpeed(0);
    myMotor2->setSpeed(0);
+       delay(15);
+       myservo.write(40);    
+    delay(15);
       break;
 
     }
@@ -65,13 +68,14 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
     while(1){
           SonarSensor(trigPin1, echoPin1);
     FrontSensor = distance;
-    myservo.write(40);    
-    delay(15);
       myMotor->run(BACKWARD);
   myMotor2->run(BACKWARD);
     if(FrontSensor <60){
               myMotor->setSpeed(0);
    myMotor2->setSpeed(0);
+   delay(15);
+       myservo.write(70);    
+    delay(15);
       break;
     }
     }
@@ -79,8 +83,6 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
     while(1){
           SonarSensor(trigPin1, echoPin1);
     FrontSensor = distance;
-    myservo.write(70);    
-    delay(15);
       myMotor->run(FORWARD);
   myMotor2->run(FORWARD);
     if(FrontSensor <3 || FrontSensor > 80 ){
@@ -97,15 +99,16 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
 
 
     void loop() {
+      /*
     SonarSensor(trigPin1, echoPin1);
     FrontSensor = distance;
     SonarSensor(trigPin2, echoPin2);
     LeftSensor = distance;
     SonarSensor(trigPin3, echoPin3);
     RightSensor = distance;
+    */
     }
 
-   
 
     void SonarSensor(int trigPin,int echoPin)
     {
