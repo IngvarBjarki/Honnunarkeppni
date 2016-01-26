@@ -58,7 +58,7 @@ void setup() {
     pinMode(echoPin3, INPUT);
 
 
-  
+
   /*
   // Set the speed to start, from 0 (off) to 255 (max speed)
   myMotor->setSpeed(200);
@@ -69,13 +69,29 @@ void setup() {
   myMotor->run(RELEASE);
   myMotor2->run(RELEASE);
 */
-
+long duration, distance
   // turn on motor
+  while(1){
+    digitalWrite(trigPin, LOW);
+    delayMicroseconds(2); // delays are required for a succesful sensor operation.
+    digitalWrite(trigPin, HIGH);
+
+    delayMicroseconds(10); //this delay is required as well!
+    digitalWrite(trigPin, LOW);
+    duration = pulseIn(echoPin, HIGH);
+    distance = (duration/2) / 29.1;// convert the distance to centimeters.
+    if(distance < 50){
+      delay(20)
+
+    }
+
+  }
 
 }
 
-  double startTime = millis(); // BUM TIL TIMA
-  double currentTime;
+double startTime = millis(); // BUM TIL TIMA
+double currentTime;
+
 void loop() {
   while(currentTime - startTime < 10000){
     currentTime = millis();
