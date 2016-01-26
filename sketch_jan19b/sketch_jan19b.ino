@@ -1,9 +1,9 @@
-/* 
+/*
 This is a test sketch for the Adafruit assembled Motor Shield for Arduino v2
 It won't work with v1.x motor shields! Only for the v2's with built in PWM
 control
 
-For use with the Adafruit Motor Shield v2 
+For use with the Adafruit Motor Shield v2
 ----> http://www.adafruit.com/products/1438
 */
 
@@ -18,10 +18,10 @@ Servo myservo;  // create servo object to control a servo
 int pos = 0;    // variable to store the servo position
 
 #define trigPin 12 // define the pins of your sensor
-#define echoPin 13 
+#define echoPin 13
 
 // Create the motor shield object with the default I2C address
-Adafruit_MotorShield AFMS = Adafruit_MotorShield(); 
+Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 // Or, create it with a different I2C address (say for stacking)
 // Adafruit_MotorShield AFMS = Adafruit_MotorShield(0x61);
 
@@ -33,7 +33,7 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
 
 void setup() {
   Serial.begin(57600);           // set up Serial library at 9600 bps
-  Serial.println("Adafruit Motorshield v2 - DC Motor test!");
+
   myservo.attach(10);  // attaches the servo on pin 9 to the servo
   myservo.write(0);              // tell servo to go to position in variable 'pos'
 
@@ -42,7 +42,14 @@ void setup() {
 
   AFMS.begin(2000);  // create with the default frequency 1.6KHz
   //AFMS.begin(1000);  // OR with a different frequency, say 1KHz
-  
+
+  double startTime = millis(); // BUM TIL TIMA
+  double currentTime;
+  while(currentTime - startTime < 10){
+    currentTime = millis();
+    Serial.println(currentTime);
+  }
+  Serial.println("While lykkju er lokid");
   // Set the speed to start, from 0 (off) to 255 (max speed)
   myMotor->setSpeed(200);
    myMotor2->setSpeed(200);
@@ -51,16 +58,16 @@ void setup() {
   // turn on motor
   myMotor->run(RELEASE);
   myMotor2->run(RELEASE);
-  
-  
+
+
   // turn on motor
-  
+
 }
 
 void loop() {
-  uint8_t i;
+ /* uint8_t i;
    long duration, distance; // start the scan
-  digitalWrite(trigPin, LOW);  
+  digitalWrite(trigPin, LOW);
   delayMicroseconds(2); // delays are required for a succesful sensor operation.
   digitalWrite(trigPin, HIGH);
 
@@ -68,10 +75,10 @@ void loop() {
   digitalWrite(trigPin, LOW);
   duration = pulseIn(echoPin, HIGH);
   distance = (duration/2) / 29.1;// convert the distance to centimeters.
-  if (distance < 33 && distance > 7)/*if there's an obstacle 25 centimers, ahead, do the following: */ 
-  {  
+  if (distance < 33 && distance > 7) //if there's an obstacle 25 centimers, ahead, do the following:
+  {
 
-     
+
     Serial.println ("Close Obstacle detected!" );
     Serial.println ("Obstacle Details:");
     Serial.print ("Distance From Robot is " );
@@ -86,7 +93,7 @@ void loop() {
     delay(1000);
     myMotor->setSpeed(200);
      myMotor2->setSpeed(200);
-    myMotor->run(BACKWARD); //if there's no obstacle ahead, Go Forward! 
+    myMotor->run(BACKWARD); //if there's no obstacle ahead, Go Forward!
     myMotor2->run(BACKWARD);
     myMotor->run(RELEASE);
   myMotor2->run(RELEASE);
@@ -103,18 +110,18 @@ Serial.print ( " CM!");// print out the distance in centimeters.
   Serial.println (" The obstacle is declared a threat due to close distance. ");
   Serial.println (" going backwards!");
   myservo.write(0);              // tell servo to go to position in variable 'pos'
-      
+
     myMotor->run(BACKWARD);  // go backwards as long as the obstacle is less than 7 cm away.
     myMotor2->run (BACKWARD);
     }
-  else 
+  else
   {
       myservo.write(0);              // tell servo to go to position in variable 'pos'
-      
+
    Serial.println ("No obstacle detected. going forward");
    delay (2000);
-   myMotor->run(FORWARD); //if there's no obstacle ahead, Go Forward! 
-    myMotor2->run(FORWARD);  
-  }  
-  
+   myMotor->run(FORWARD); //if there's no obstacle ahead, Go Forward!
+    myMotor2->run(FORWARD);
+  }
+  */
 }
