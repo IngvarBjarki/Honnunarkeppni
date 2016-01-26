@@ -63,9 +63,13 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
         if (LeftSensor < 50) {
             myMotor->setSpeed(0);
             myMotor2->setSpeed(0);
-            delay(15);
+           /* delay(15);
             myservo.write(40);
-            delay(15);
+            delay(15);*/
+            for(int x = 0; x<31; x++){
+              // fer fra 70 i 40
+              myservo.write(70-x);
+            }
             break;
 
             }
