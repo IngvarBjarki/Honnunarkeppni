@@ -29,7 +29,7 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
     void setup()
     {
 
-        Serial.begin(9600);           // set up Serial library at 9600 bps
+        Serial.begin(9600);            // set up Serial library at 9600 bps
           
     pinMode(trigPin1, OUTPUT);
     pinMode(echoPin1, INPUT);
