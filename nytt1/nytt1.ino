@@ -38,7 +38,7 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
     pinMode(trigPin3, OUTPUT);
     pinMode(echoPin3, INPUT);
 
-  myservo.attach(10);  // attaches the servo on pin 9 to the servo
+  myservo.attach(9);  // attaches the servo on pin 9 to the servo
   myservo.write(70);              // tell servo to go to position in variable 'pos'
   AFMS.begin(2000);  // create with the default frequency 1.6KHz
   //AFMS.begin(1000);  // OR with a different frequency, say 1KHz
@@ -63,12 +63,16 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
         if (LeftSensor < 50) {
             myMotor->setSpeed(0);
             myMotor2->setSpeed(0);
-           /* delay(15);
+            Serial.println("hallo0");
+           //delay(15);
+           /*
             myservo.write(40);
             delay(15);*/
             for(int x = 0; x<31; x++){
               // fer fra 70 i 40
+              Serial.println("halllllooooo");
               myservo.write(70-x);
+              delay(15);
             }
             break;
 
@@ -78,27 +82,38 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
          Serial.println("while lykkja 2");
           SonarSensor(trigPin1, echoPin1);
           FrontSensor = distance;
-           myMotor->run(BACKWARD);
-           myMotor2->run(BACKWARD);
+          myMotor->run(BACKWARD);
+          myMotor2->run(BACKWARD);
+          myMotor->setSpeed(70);
+          myMotor2->setSpeed(70);
 
+         
+          Serial.println(FrontSensor);
           if(FrontSensor <60){
+            Serial.println("adsglasudihgluaisdhgluaisdhgladsg");
+            
               myMotor->setSpeed(0);
               myMotor2->setSpeed(0);
-              delay(15);
+              delay(25);
              myservo.write(70);
-            delay(15);
+            delay(505);
             break;
           }
     }
 
     while(1){
-         Serial.println("while lykkja 1");
+         Serial.println("while lykkja 3");
           SonarSensor(trigPin1, echoPin1);
           FrontSensor = distance;
           myMotor->run(FORWARD);
           myMotor2->run(FORWARD);
+          myMotor->setSpeed(70);
+          myMotor2->setSpeed(70);
+          
+          Serial.println(FrontSensor);
 
           if(FrontSensor <3 || FrontSensor > 80 ){
+              Serial.println("hafnarfjordur good morning");
               myMotor->setSpeed(0);
               myMotor2->setSpeed(0);
               break;
