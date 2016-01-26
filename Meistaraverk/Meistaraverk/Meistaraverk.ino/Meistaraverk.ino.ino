@@ -53,7 +53,7 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
   myMotor2->run(RELEASE);
 
     while(1){
-      Serial.println(" Left sensor while lykkja");
+      Serial.print(" Left sensor while lykkja");
     SonarSensor(trigPin2, echoPin2);
     LeftSensor = distance;
     if (LeftSensor < 50) {
@@ -67,7 +67,7 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
     }
     }
     while(1){
-      Serial.println("FrontSensor whie lykkja");
+      Serial.print("FrontSensor whie lykkja");
           SonarSensor(trigPin1, echoPin1);
     FrontSensor = distance;
       myMotor->run(BACKWARD);
@@ -83,7 +83,7 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
     }
 
     while(1){
-      Serial.pirntln("Seinni front sensor while lykkja");
+      Serial.print("Seinni front sensor while lykkja");
           SonarSensor(trigPin1, echoPin1);
     FrontSensor = distance;
       myMotor->run(FORWARD);
@@ -111,6 +111,7 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
     RightSensor = distance;
     */
     }
+
 
 
     void SonarSensor(int trigPin,int echoPin)
