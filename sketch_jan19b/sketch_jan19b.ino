@@ -15,6 +15,8 @@ For use with the Adafruit Motor Shield v2
 Servo myservo;  // create servo object to control a servo
 // twelve servo objects can be created on most boards
 
+
+
 int pos = 0;    // variable to store the servo position
 
 #define trigPin 12 // define the pins of your sensor
@@ -32,7 +34,7 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
 //Adafruit_DCMotor *myOtherMotor = AFMS.getMotor(2);
 
 void setup() {
-  Serial.begin(57600);           // set up Serial library at 9600 bps
+  Serial.begin(9600);           // set up Serial library at 9600 bps
 
   myservo.attach(10);  // attaches the servo on pin 9 to the servo
   myservo.write(0);              // tell servo to go to position in variable 'pos'
@@ -43,13 +45,9 @@ void setup() {
   AFMS.begin(2000);  // create with the default frequency 1.6KHz
   //AFMS.begin(1000);  // OR with a different frequency, say 1KHz
 
-  double startTime = millis(); // BUM TIL TIMA
-  double currentTime;
-  while(currentTime - startTime < 10){
-    currentTime = millis();
-    Serial.println(currentTime);
-  }
-  Serial.println("While lykkju er lokid");
+
+  
+  /*
   // Set the speed to start, from 0 (off) to 255 (max speed)
   myMotor->setSpeed(200);
    myMotor2->setSpeed(200);
@@ -58,13 +56,20 @@ void setup() {
   // turn on motor
   myMotor->run(RELEASE);
   myMotor2->run(RELEASE);
-
+*/
 
   // turn on motor
 
 }
 
+  double startTime = millis(); // BUM TIL TIMA
+  double currentTime;
 void loop() {
+  while(currentTime - startTime < 10000){
+    currentTime = millis();
+    Serial.println(currentTime);
+  }
+  //Serial.println("While lykkju er lokid");
  /* uint8_t i;
    long duration, distance; // start the scan
   digitalWrite(trigPin, LOW);
