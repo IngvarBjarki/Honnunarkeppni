@@ -38,42 +38,83 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
     pinMode(trigPin3, OUTPUT);
     pinMode(echoPin3, INPUT);
 
-  myservo.attach(9);  // attaches the servo on pin 9 to the servo
-  myservo.write(70);              // tell servo to go to position in variable 'pos'
   AFMS.begin(2000);  // create with the default frequency 1.6KHz
   //AFMS.begin(1000);  // OR with a different frequency, say 1KHz
+  //delay(30);
+  myservo.attach(10);  // attaches the servo on pin 9 to the servo
+  //delay(500);
+  //cli();
+  //myservo.write(70);
+  //myservo.detach();
+   //sei();
+  //delay(500);
+
+  /*
+              for(int x = 0; x<71; x++){
+              // fer fra 70 i 40
+              Serial.println("sta[setning servos");
+              
+              myservo.write(x);
+              delay(15);
+            }*/
+
 
   // Set the speed to start, from 0 (off) to 255 (max speed)
-  myMotor->setSpeed(75);
-  myMotor2->setSpeed(75);
+  myMotor->setSpeed(70);
+  myMotor2->setSpeed(70);
   myMotor->run(FORWARD);
   myMotor2->run(FORWARD);
   // turn on motor
-  myMotor->run(RELEASE);
-  myMotor2->run(RELEASE);
-
+  /*myMotor->run(RELEASE);
+  myMotor2->run(RELEASE);*/
+   /* delay(500);
+    double timi = millis();
+    while(timi<450){
+      timi = millis();
+    if(timi == 400){
+      myservo.write(70);
+    }
+    }
+  //myservo.write(70);
+  delay(500);*/
+int servoinn;
     while(1){
 
         Serial.println("while lykkja 1");
-        myMotor->run(FORWARD);
-        myMotor2->run(FORWARD);
-        SonarSensor(trigPin2, echoPin2);
-        LeftSensor = distance;
 
-        if (LeftSensor < 50) {
+        SonarSensor(trigPin3, echoPin3);
+        RightSensor = distance; 
+        
+        myservo.write(70);              // tell servo to go to position in variable 'pos'
+        //delay(50);
+        servoinn = myservo.read();
+Serial.println("myservo is");
+        Serial.println(servoinn);
+        /*myMotor->run(FORWARD);
+        myMotor2->run(FORWARD);*/
+        /*delay(15);
+          myservo.write(90);
+          delay(15);*/
+
+
+        if (RightSensor < 50) {
+            delay(1000);
             myMotor->setSpeed(0);
             myMotor2->setSpeed(0);
-            Serial.println("hallo0");
-           //delay(15);
-           /*
+            Serial.println("vinstri sensor");
+            Serial.println(LeftSensor);
+
+            //myservo.attach(10);
+           
             myservo.write(40);
-            delay(15);*/
-            for(int x = 0; x<31; x++){
+            delay(15);
+            /*for(int x = 0; x<31; x++){
               // fer fra 70 i 40
               Serial.println("halllllooooo");
               myservo.write(70-x);
               delay(15);
             }
+            */
             break;
 
             }
@@ -89,8 +130,9 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
 
          
           Serial.println(FrontSensor);
-          if(FrontSensor <60){
-            Serial.println("adsglasudihgluaisdhgluaisdhgladsg");
+          if(FrontSensor <80){
+            Serial.println("front sensor");
+              Serial.println(FrontSensor);
             
               myMotor->setSpeed(0);
               myMotor2->setSpeed(0);
@@ -102,6 +144,7 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
     }
 
     while(1){
+      
          Serial.println("while lykkja 3");
           SonarSensor(trigPin1, echoPin1);
           FrontSensor = distance;
@@ -112,12 +155,32 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
           
           Serial.println(FrontSensor);
 
-          if(FrontSensor <3 || FrontSensor > 80 ){
+          if(FrontSensor <3 //nyjasta : /*|| FrontSensor > 100*/ ){
               Serial.println("hafnarfjordur good morning");
+              Serial.println(FrontSensor);
+
               myMotor->setSpeed(0);
               myMotor2->setSpeed(0);
               break;
               }
+              //nyjasta:
+              else if(FrontSensor > 100){
+
+              delay(25);
+             myservo.write(100);
+            delay(505);
+                            myMotor->run(FORWARD);
+          myMotor2->run(FORWARD);
+          myMotor->setSpeed(70);
+          myMotor2->setSpeed(70);
+          if(FrontSensor <80){
+            goto reynaaftur;
+          }
+
+                
+              }
+          //nyjasta
+          reynaaftur: 
           }
     }
 
