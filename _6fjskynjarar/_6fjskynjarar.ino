@@ -7,8 +7,8 @@
     #define trigPin3 8
     #define echoPin3 9*/
     //nr1
-                #define trigPin1 0
-    #define echoPin1 1
+                #define trigPin1 8
+    #define echoPin1 9
 
             #define trigPin2 2
     #define echoPin2 3
@@ -66,7 +66,7 @@
 
     
     Serial.print(Sensor1);
-    Serial.print("   ");
+    Serial.print("  virkar ");
     Serial.print(Sensor2);
     Serial.print("   ");
     Serial.println(Sensor3);
@@ -76,6 +76,7 @@
     Serial.print(Sensor5);
     Serial.print("   ");
     Serial.println(Sensor6);
+    delay(2000);
     }
 
     void SonarSensor(int trigPin,int echoPin)
