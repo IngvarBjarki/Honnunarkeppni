@@ -254,23 +254,18 @@ while(1){
           Serial.println(Sensor2);
           delay(2000);
 
-          if(timeToTurn>3000){
+          if(timeToTurn>1500){
             gradur = floor(4*(timeToTurn-3000)/1000);
+            Serial.println(70+gradur);
              myservo.write(70+gradur);
               //delay(15);
           }
+          Serial.println("i att ad vegg sensor 4:");
+          Serial.println(Sensor4);
 
-          if(Sensor4 >130){
-            myservo.write(50);
-              delay(15);
-            if(Sensor4 <120){
-              myservo.write(70);
-              delay(15);
-              goto reynaaftur;
-            }  
-          }
+          
 
-          else if( Sensor3 <35 || Sensor2 < 35  /*|| Sensor3 < 4  */ ){
+         if( Sensor3 <40 || Sensor2 < 40  /*|| Sensor3 < 4  */ ){
              
               Serial.println(" sensor4");
               Serial.println(Sensor4);
@@ -284,12 +279,15 @@ while(1){
               delay(505);
               break;
               }
-              else if (Sensor4>200){
-                              Serial.println("stefni 'ut af, haettur");
-                              myMotor->setSpeed(0);
-              myMotor2->setSpeed(0);
-                break;
-              }
+              else if(Sensor4 >130){
+            myservo.write(50);
+              delay(15);
+            if(Sensor4 <120){
+              myservo.write(70);
+              delay(15);
+              goto reynaaftur;
+            }  
+          }
 }
 
 while(1){
