@@ -26,7 +26,7 @@
 #define echoPin6 13
 
 long duration, distance, Sensor1,Sensor2,Sensor3,Sensor4,Sensor5,Sensor6;
-double timeToMovieFw, timeToTurn;
+unsigned long timeToMovieFw, timeToTurn;
 
 Servo myservo;
 
@@ -169,7 +169,7 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
       }
 }
 
-double startTimeBw = millis();
+unsigned long startTimeBw = millis();
 
 while(1){
       //bakkar fra takka
