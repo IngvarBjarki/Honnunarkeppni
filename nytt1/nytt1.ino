@@ -4,13 +4,16 @@
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 #include <Servo.h>
 
+    //left
     #define trigPin1 12
     #define echoPin1 13
-    #define trigPin2 10
-    #define echoPin2 11
+    //frontright
+    #define trigPin2 2
+    #define echoPin2 1
+    //frontleft
     #define trigPin3 8
     #define echoPin3 9
-    long duration, distance, RightSensor,BackSensor,FrontSensor,LeftSensor;
+    long duration, distance, RightSensor,FrontLeftSensor,FrontRightSensor,LeftSensor;
 
     Servo myservo;
 
@@ -82,8 +85,8 @@ int servoinn;
 
         Serial.println("while lykkja 1");
 
-        SonarSensor(trigPin3, echoPin3);
-        RightSensor = distance; 
+        SonarSensor(trigPin1, echoPin1);
+        LeftSensor = distance; 
         
         myservo.write(70);              // tell servo to go to position in variable 'pos'
         //delay(50);
@@ -97,7 +100,7 @@ Serial.println("myservo is");
           delay(15);*/
 
 
-        if (RightSensor < 50) {
+        if (LeftSensor < 35) {
             delay(1000);
             myMotor->setSpeed(0);
             myMotor2->setSpeed(0);
@@ -121,18 +124,19 @@ Serial.println("myservo is");
     }
     while(1){
          Serial.println("while lykkja 2");
-          SonarSensor(trigPin1, echoPin1);
-          FrontSensor = distance;
+          SonarSensor(trigPin2, echoPin2);
+          FrontRightSensor = distance;
           myMotor->run(BACKWARD);
           myMotor2->run(BACKWARD);
           myMotor->setSpeed(70);
           myMotor2->setSpeed(70);
 
          
-          Serial.println(FrontSensor);
-          if(FrontSensor <80){
-            Serial.println("front sensor");
-              Serial.println(FrontSensor);
+          Serial.println(FrontRightSensor);
+          if(FrontRightSensor <50){
+            delay(500);
+            Serial.println("front right sensor");
+              Serial.println(FrontRightSensor);
             
               myMotor->setSpeed(0);
               myMotor2->setSpeed(0);
@@ -146,25 +150,32 @@ Serial.println("myservo is");
     while(1){
       
          Serial.println("while lykkja 3");
-          SonarSensor(trigPin1, echoPin1);
-          FrontSensor = distance;
+          SonarSensor(trigPin2, echoPin2);
+          FrontRightSensor = distance;
+          SonarSensor(trigPin3, echoPin3);
+          FrontLeftSensor = distance;
           myMotor->run(FORWARD);
           myMotor2->run(FORWARD);
           myMotor->setSpeed(70);
           myMotor2->setSpeed(70);
           
-          Serial.println(FrontSensor);
+          Serial.println(FrontRightSensor);
 
-          if(FrontSensor <3 //nyjasta : /*|| FrontSensor > 100*/ ){
-              Serial.println("hafnarfjordur good morning");
-              Serial.println(FrontSensor);
+          if(/*FrontRightSensor <4 || */FrontLeftSensor < 4 /*|| LeftSensor > 100*/ ){
+             
+              Serial.println("Front Right sensor");
+              Serial.println(FrontRightSensor);
+              
+               Serial.println("Front left");
+               Serial.println(FrontLeftSensor);
 
               myMotor->setSpeed(0);
               myMotor2->setSpeed(0);
               break;
               }
+              /*
               //nyjasta:
-              else if(FrontSensor > 100){
+              else if(LeftSensor > 100){
 
               delay(25);
              myservo.write(100);
@@ -173,14 +184,14 @@ Serial.println("myservo is");
           myMotor2->run(FORWARD);
           myMotor->setSpeed(70);
           myMotor2->setSpeed(70);
-          if(FrontSensor <80){
+          if(LeftSensor <80){
             goto reynaaftur;
           }
 
                 
               }
           //nyjasta
-          reynaaftur: 
+          reynaaftur: */
           }
     }
 
@@ -192,7 +203,7 @@ Serial.println("myservo is");
     void loop() {
       /*
     SonarSensor(trigPin1, echoPin1);
-    FrontSensor = distance;
+    LeftSensor = distance;
     SonarSensor(trigPin2, echoPin2);
     LeftSensor = distance;
     SonarSensor(trigPin3, echoPin3);

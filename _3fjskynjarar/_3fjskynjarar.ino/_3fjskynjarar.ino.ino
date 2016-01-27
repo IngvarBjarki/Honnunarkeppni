@@ -1,9 +1,17 @@
 
-
+/*
     #define trigPin1 12
     #define echoPin1 13
     #define trigPin2 10
     #define echoPin2 11
+    #define trigPin3 8
+    #define echoPin3 9*/
+        #define trigPin1 12
+    #define echoPin1 13
+    //frontright
+    #define trigPin2 2
+    #define echoPin2 1
+    //frontleft
     #define trigPin3 8
     #define echoPin3 9
 
