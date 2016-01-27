@@ -1,20 +1,32 @@
 
+
+//afram haegri gradur 30 <70
+//afram vinstri gradur 100 > 70
 #include <Wire.h>
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 #include <Servo.h>
 
-    //left
-    #define trigPin1 12
-    #define echoPin1 13
-    //frontright
-    #define trigPin2 2
-    #define echoPin2 1
-    //frontleft
-    #define trigPin3 8
-    #define echoPin3 9
-    long duration, distance, RightSensor,FrontLeftSensor,FrontRightSensor,LeftSensor;
+                #define trigPin1 8
+    #define echoPin1 9
 
+            #define trigPin2 2
+    #define echoPin2 3
+
+        #define trigPin3 4
+    #define echoPin3 5
+
+        #define trigPin4 6
+    #define echoPin4 7
+
+        #define trigPin5 10
+    #define echoPin5 11
+
+        #define trigPin6 12
+    #define echoPin6 13
+    
+    long duration, distance, Sensor1,Sensor2,Sensor3,Sensor4,Sensor5,Sensor6;
+double timeToMovieFw, timeToTurn;
     Servo myservo;
 
      // Create the motor shield object with the default I2C address
@@ -40,6 +52,12 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
     pinMode(echoPin2, INPUT);
     pinMode(trigPin3, OUTPUT);
     pinMode(echoPin3, INPUT);
+    pinMode(trigPin4, OUTPUT);
+    pinMode(echoPin4, INPUT);
+    pinMode(trigPin5, OUTPUT);
+    pinMode(echoPin5, INPUT);
+    pinMode(trigPin6, OUTPUT);
+    pinMode(echoPin6, INPUT);
 
   AFMS.begin(2000);  // create with the default frequency 1.6KHz
   //AFMS.begin(1000);  // OR with a different frequency, say 1KHz
@@ -52,14 +70,6 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
    //sei();
   //delay(500);
 
-  /*
-              for(int x = 0; x<71; x++){
-              // fer fra 70 i 40
-              Serial.println("sta[setning servos");
-              
-              myservo.write(x);
-              delay(15);
-            }*/
 
 
   // Set the speed to start, from 0 (off) to 255 (max speed)
@@ -68,25 +78,17 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
   myMotor->run(FORWARD);
   myMotor2->run(FORWARD);
   // turn on motor
-  /*myMotor->run(RELEASE);
-  myMotor2->run(RELEASE);*/
-   /* delay(500);
-    double timi = millis();
-    while(timi<450){
-      timi = millis();
-    if(timi == 400){
-      myservo.write(70);
-    }
-    }
-  //myservo.write(70);
-  delay(500);*/
+
+
 int servoinn;
+
+//keyra afram i byrjun
     while(1){
 
         Serial.println("while lykkja 1");
 
-        SonarSensor(trigPin1, echoPin1);
-        LeftSensor = distance; 
+        SonarSensor(trigPin6, echoPin6);
+        Sensor6 = distance; 
         
         myservo.write(70);              // tell servo to go to position in variable 'pos'
         //delay(50);
@@ -99,44 +101,39 @@ Serial.println("myservo is");
           myservo.write(90);
           delay(15);*/
 
-
-        if (LeftSensor < 35) {
-            delay(1000);
+//skynjar sulu+raudan takka
+        if (Sensor6 < 35) {
+            delay(500);
             myMotor->setSpeed(0);
             myMotor2->setSpeed(0);
             Serial.println("vinstri sensor");
-            Serial.println(LeftSensor);
+            Serial.println(Sensor6);
 
             //myservo.attach(10);
            
-            myservo.write(40);
+            myservo.write(30);
             delay(15);
-            /*for(int x = 0; x<31; x++){
-              // fer fra 70 i 40
-              Serial.println("halllllooooo");
-              myservo.write(70-x);
-              delay(15);
-            }
-            */
             break;
 
             }
     }
+    
     while(1){
+      //beygir thar til skynjar takka ad framan
          Serial.println("while lykkja 2");
           SonarSensor(trigPin2, echoPin2);
-          FrontRightSensor = distance;
+          Sensor2 = distance;
           myMotor->run(BACKWARD);
           myMotor2->run(BACKWARD);
-          myMotor->setSpeed(70);
-          myMotor2->setSpeed(70);
+          myMotor->setSpeed(60);
+          myMotor2->setSpeed(60);
 
          
-          Serial.println(FrontRightSensor);
-          if(FrontRightSensor <50){
+          Serial.println(Sensor2);
+          if(Sensor2 <40){
             delay(500);
-            Serial.println("front right sensor");
-              Serial.println(FrontRightSensor);
+            Serial.println("sensor2");
+              Serial.println(Sensor2);
             
               myMotor->setSpeed(0);
               myMotor2->setSpeed(0);
@@ -148,31 +145,192 @@ Serial.println("myservo is");
     }
 
     while(1){
-      
+      //keyrir i att ad takka
          Serial.println("while lykkja 3");
-          SonarSensor(trigPin2, echoPin2);
-          FrontRightSensor = distance;
-          SonarSensor(trigPin3, echoPin3);
-          FrontLeftSensor = distance;
+       SonarSensor(trigPin1, echoPin1);
+    Sensor1 = distance;
+    SonarSensor(trigPin2, echoPin2);
+    Sensor2 = distance;
+    SonarSensor(trigPin3, echoPin3);
+    Sensor3 = distance;
+
+    SonarSensor(trigPin4, echoPin4);
+    Sensor4 = distance;
           myMotor->run(FORWARD);
           myMotor2->run(FORWARD);
           myMotor->setSpeed(70);
           myMotor2->setSpeed(70);
           
-          Serial.println(FrontRightSensor);
+          Serial.println(Sensor2);
 
-          if(/*FrontRightSensor <4 || */FrontLeftSensor < 4 /*|| LeftSensor > 100*/ ){
+          if(Sensor2 <5 || Sensor3 < 5 ||Sensor1 < 5 ||Sensor4 < 5 /*|| LeftSensor > 100*/ ){
              
-              Serial.println("Front Right sensor");
-              Serial.println(FrontRightSensor);
+              Serial.println(" sensor2");
+              Serial.println(Sensor2);
               
-               Serial.println("Front left");
-               Serial.println(FrontLeftSensor);
+               Serial.println("sensor3");
+               Serial.println(Sensor3);
 
               myMotor->setSpeed(0);
               myMotor2->setSpeed(0);
+
+              delay(25);
+              myservo.write(120);
+              delay(505);
               break;
               }
+}
+double startTimeBw = millis();
+
+while(1){
+      //bakkar fra takka
+         Serial.println("while lykkja 4");
+    timeToMovieFw = millis() - startTimeBw;
+    
+    SonarSensor(trigPin1, echoPin1);
+    Sensor1 = distance;
+    SonarSensor(trigPin2, echoPin2);
+    Sensor2 = distance;
+    SonarSensor(trigPin3, echoPin3);
+    Sensor3 = distance;
+
+    SonarSensor(trigPin4, echoPin4);
+    Sensor4 = distance;
+
+          myMotor->run(BACKWARD);
+          myMotor2->run(BACKWARD);
+          myMotor->setSpeed(65);
+          myMotor2->setSpeed(65);
+          
+          Serial.println(Sensor2);
+          Serial.println("timeToMOvie");
+          Serial.println(timeToMovieFw);
+
+          if(Sensor1>60 &&Sensor2>60&&Sensor3>60&&Sensor4>60&&Sensor4<120 && (timeToMovieFw > 2600 && timeToMovieFw < 4000 ) ){
+             //delay(1500);
+                 Serial.print(Sensor1);
+    Serial.print("  virkar ");
+    Serial.print(Sensor2);
+    Serial.print("   ");
+    Serial.println(Sensor3);
+        Serial.print("   ");
+        Serial.print(Sensor4);
+    Serial.print("   ");
+    Serial.print(Sensor5);
+    Serial.print("   ");
+    Serial.println(Sensor6);
+              Serial.println(" sensor4");
+              Serial.println(Sensor4);
+
+              myMotor->setSpeed(0);
+              myMotor2->setSpeed(0);
+              delay(25);
+              myservo.write(70);
+              delay(505);
+              break;
+              }
+}
+//double floor;
+double gradur;
+startTimeBw = millis();
+while(1){
+      //keyrir i att ad vegg
+      reynaaftur:
+      timeToTurn = millis() - startTimeBw;
+      
+         Serial.println("while lykkja 5");
+          SonarSensor(trigPin4, echoPin4);
+          Sensor4 = distance;
+          SonarSensor(trigPin3, echoPin3);
+          Sensor3 = distance;
+          SonarSensor(trigPin2, echoPin2);
+          Sensor2 = distance;
+
+          myMotor->run(FORWARD);
+          myMotor2->run(FORWARD);
+          myMotor->setSpeed(70);
+          myMotor2->setSpeed(70);
+          
+          Serial.println(Sensor2);
+          delay(2000);
+
+          if(timeToTurn>3000){
+            gradur = floor(4*(timeToTurn-3000)/1000);
+             myservo.write(70+gradur);
+              //delay(15);
+          }
+
+          if(Sensor4 >130){
+            myservo.write(50);
+              delay(15);
+            if(Sensor4 <120){
+              myservo.write(70);
+              delay(15);
+              goto reynaaftur;
+            }  
+          }
+
+          else if( Sensor3 <35 || Sensor2 < 35  /*|| Sensor3 < 4  */ ){
+             
+              Serial.println(" sensor4");
+              Serial.println(Sensor4);
+                 Serial.println(" sensor3");
+              Serial.println(Sensor3);
+
+              myMotor->setSpeed(0);
+              myMotor2->setSpeed(0);
+              delay(25);
+              myservo.write(35);
+              delay(505);
+              break;
+              }
+              else if (Sensor4>200){
+                              Serial.println("stefni 'ut af, haettur");
+                              myMotor->setSpeed(0);
+              myMotor2->setSpeed(0);
+                break;
+              }
+}
+
+while(1){
+      //beygir til haegri fra vegg
+         Serial.println("while lykkja 6");
+          SonarSensor(trigPin4, echoPin4);
+          Sensor4 = distance;
+          SonarSensor(trigPin3, echoPin3);
+          Sensor3 = distance;
+
+          myMotor->run(FORWARD);
+          myMotor2->run(FORWARD);
+          myMotor->setSpeed(60);
+          myMotor2->setSpeed(60);
+          
+          Serial.println(Sensor2);
+          delay(3000);
+
+             
+              Serial.println(" sensor4");
+              Serial.println(Sensor4);
+                 Serial.println(" sensor3");
+              Serial.println(Sensor3);
+
+              myMotor->setSpeed(0);
+              myMotor2->setSpeed(0);
+              delay(25);
+              myservo.write(100);
+              delay(505);
+//beygir til vinstri,kominn framhja veggjum
+          myMotor->run(FORWARD);
+          myMotor2->run(FORWARD);
+          myMotor->setSpeed(70);
+          myMotor2->setSpeed(70);
+          delay(3000);
+          break;
+
+        
+}
+
+              
               /*
               //nyjasta:
               else if(LeftSensor > 100){
@@ -192,7 +350,7 @@ Serial.println("myservo is");
               }
           //nyjasta
           reynaaftur: */
-          }
+          
     }
 
 
