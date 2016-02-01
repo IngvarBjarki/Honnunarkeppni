@@ -157,10 +157,10 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
           if(Sensor2 <5 || Sensor3 < 5 ||Sensor1 < 5 ||Sensor4 < 5 ){
                Serial.println("sensor1");
                Serial.println(Sensor1);
-             
+
               Serial.println(" sensor2");
               Serial.println(Sensor2);
-              
+
                Serial.println("sensor3");
                Serial.println(Sensor3);
 
