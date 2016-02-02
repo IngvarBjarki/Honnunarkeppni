@@ -8,7 +8,7 @@
 #define PING_PIN3 6
 #define PING_PIN4 7
 #define PING_PIN5 8
-#define PING_PIN6 9
+//#define PING_PIN6 9
 #define PING_PIN7 13 
 
 //        #define trigPin1 2
@@ -23,7 +23,7 @@ NewPing sonar(PING_PIN2, PING_PIN2 );
 NewPing sonar3(PING_PIN3, PING_PIN3 );
 NewPing sonar4(PING_PIN4, PING_PIN4 );
 NewPing sonar5(PING_PIN5, PING_PIN5 );
-NewPing sonar6(PING_PIN6, PING_PIN6 );
+//NewPing sonar6(PING_PIN6, PING_PIN6 );
 NewPing sonar7(PING_PIN7, PING_PIN7 );
 
 
@@ -50,7 +50,7 @@ unsigned int uS2 = sonar.ping(); // Send ping, get ping time in microseconds (uS
 unsigned int uS3 = sonar3.ping();
 unsigned int uS4 = sonar4.ping();
 unsigned int uS5 = sonar5.ping();
-unsigned int uS6 = sonar6.ping();
+//unsigned int uS6 = sonar6.ping();
 unsigned int uS7 = sonar7.ping();
 
 
@@ -71,7 +71,7 @@ Serial.print(uS4 / US_ROUNDTRIP_CM);
 Serial.print("  ");
 Serial.print(uS5 / US_ROUNDTRIP_CM);
 Serial.print("  ");
-Serial.print(uS6 / US_ROUNDTRIP_CM);
+//Serial.print(uS6 / US_ROUNDTRIP_CM);
 Serial.print("  ");
 Serial.print(uS7 / US_ROUNDTRIP_CM);
 
