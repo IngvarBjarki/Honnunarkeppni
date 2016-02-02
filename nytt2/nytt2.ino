@@ -17,7 +17,7 @@
 #define PING_PIN6 9
 #define PING_PIN7 13
 
-unsigned int duration,Sensor1,Sensor2,Sensor3,Sensor4,Sensor5,Sensor6,Sensor7; 
+unsigned int duration,Sensor1,Sensor2,Sensor3,Sensor4,Sensor5,Sensor6,Sensor7, Sensor5old; 
 unsigned long timeToMovieFw, timeToTurn;
 
 NewPing sonar1(PING_PIN1, PING_PIN1 );
@@ -29,7 +29,7 @@ NewPing sonar5(PING_PIN5, PING_PIN5 );
 NewPing sonar7(PING_PIN7, PING_PIN7 );
 
 Servo myservo;
-//Servo myservo2;
+Servo myservo2;
 
      // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
@@ -50,11 +50,11 @@ void setup() {
   AFMS.begin(2000);  // create with the default frequency 1.6KHz
   //AFMS.begin(1000);  // OR with a different frequency, say 1KHz
   //delay(30);
- //myservo2.attach(9);  // attaches the servo on pin 9 to the servo object
+ myservo2.attach(9);  // attaches the servo on pin 9 to the servo object
 
   myservo.attach(10);  // attaches the servo on pin 9 to the servo
   delay(15);
-//myservo2.write(50);
+myservo2.write(50);
 delay(15);
   // Set the speed to start, from 0 (off) to 255 (max speed)
   myMotor->setSpeed(70);
@@ -82,7 +82,7 @@ delay(15);
         Serial.println(servoinn);
 
 //skynjar sulu+raudan takka
-        if (/*Sensor6 < 35 && Sensor6 != 0 && */Sensor5 <35 && Sensor5 != 0) {
+        if (/*Sensor6 < 35 && Sensor6 != 0 && */Sensor5 <35 && Sensor5 != 0 && Sensor5old<35) {
             delay(500);
             myMotor->setSpeed(0);
             myMotor2->setSpeed(0);
@@ -94,6 +94,7 @@ delay(15);
             break;
 
             }
+            Sensor5old=Sensor5;
     }
     while(1){
       //beygir thar til skynjar takka ad framan
@@ -122,7 +123,7 @@ delay(15);
             myMotor2->setSpeed(0);
 
             delay(25);
-             myservo.write(70);
+             myservo.write(80);
             delay(505);
             break;
           }
