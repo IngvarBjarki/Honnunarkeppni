@@ -54,7 +54,7 @@ void setup() {
 
   myservo.attach(10);  // attaches the servo on pin 9 to the servo
   delay(15);
-myservo2.write(50);
+myservo2.write(100);
 delay(15);
   // Set the speed to start, from 0 (off) to 255 (max speed)
   myMotor->setSpeed(70);
@@ -82,7 +82,7 @@ delay(15);
         Serial.println(servoinn);
 
 //skynjar sulu+raudan takka
-        if (/*Sensor6 < 35 && Sensor6 != 0 && */Sensor5 <35 && Sensor5 != 0 && Sensor5old<35) {
+        if (/*Sensor6 < 35 && Sensor6 != 0 && */Sensor5 <35 && Sensor5 != 0 && Sensor5old<35 && Sensor5old!=0) {
             delay(500);
             myMotor->setSpeed(0);
             myMotor2->setSpeed(0);
@@ -129,6 +129,183 @@ delay(15);
           }
     }
 
+  while(1){
+      //keyrir i att ad takka
+   Serial.println("while lykkja 3");
+        delay(50); // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay
+        duration = sonar2.ping();// Send ping, get ping time in microseconds 
+        Sensor2 = duration/US_ROUNDTRIP_CM;// convert time into distance
+        duration = sonar3.ping();// Send ping, get ping time in microseconds 
+        Sensor3 = duration/US_ROUNDTRIP_CM;// convert time into distance
+        duration = sonar4.ping();// Send ping, get ping time in microseconds 
+        Sensor4 = duration/US_ROUNDTRIP_CM;// convert time into distance
+
+
+    myMotor->run(FORWARD);
+    myMotor2->run(FORWARD);
+    myMotor->setSpeed(70);
+    myMotor2->setSpeed(70);
+
+    Serial.println(Sensor2);
+
+
+
+
+          if(Sensor2 <5 && Sensor2 !=0 || Sensor3 < 5 && Sensor3 !=0 ||Sensor4 < 5 &&Sensor4!=0 ){
+               /*Serial.println("sensor1");
+               Serial.println(Sensor1);*/
+
+              Serial.println(" sensor2");
+              Serial.println(Sensor2);
+
+               Serial.println("sensor3");
+               Serial.println(Sensor3);
+
+               Serial.println("sensor4");
+               Serial.println(Sensor4);
+
+              myMotor->setSpeed(0);
+              myMotor2->setSpeed(0);
+
+
+          delay(25);
+          myservo.write(120);
+          delay(505);
+          break;
+      }
+  }
+
+  unsigned long startTimeBw = millis();
+
+  while(1){
+      //bakkar fra takka
+   Serial.println("while lykkja 4");
+    timeToMovieFw = millis() - startTimeBw;
+
+    delay(50); // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay
+        duration = sonar2.ping();// Send ping, get ping time in microseconds 
+        Sensor2 = duration/US_ROUNDTRIP_CM;// convert time into distance
+        duration = sonar3.ping();// Send ping, get ping time in microseconds 
+        Sensor3 = duration/US_ROUNDTRIP_CM;// convert time into distance
+        duration = sonar4.ping();// Send ping, get ping time in microseconds 
+        Sensor4 = duration/US_ROUNDTRIP_CM;// convert time into distance
+
+    myMotor->run(BACKWARD);
+    myMotor2->run(BACKWARD);
+    myMotor->setSpeed(65);
+    myMotor2->setSpeed(65);
+
+    Serial.println(Sensor2);
+    Serial.println("timeToMOvie");
+    Serial.println(timeToMovieFw);
+
+    if(Sensor2>60&&Sensor3>60&&Sensor4>60&&Sensor4<120 && (timeToMovieFw > 2600 /*&& timeToMovieFw < 4000*/ ) ){
+       //delay(1500);
+        Serial.print(Sensor2);
+        Serial.print("   ");
+        Serial.println(Sensor3);
+        Serial.print("   ");
+        Serial.print(Sensor4);
+
+        myMotor->setSpeed(0);
+        myMotor2->setSpeed(0);
+        delay(25);
+        myservo.write(80);
+        delay(505);
+        break;
+    }
+  }
+
+  startTimeBw = millis();
+  while(1){
+      //keyrir i att ad vegg
+      Serial.println("while lykkja 5");
+      reynaaftur:
+      timeToTurn = millis() - startTimeBw;
+
+
+        delay(50); // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay
+        duration = sonar2.ping();// Send ping, get ping time in microseconds 
+        Sensor2 = duration/US_ROUNDTRIP_CM;// convert time into distance
+        duration = sonar3.ping();// Send ping, get ping time in microseconds 
+        Sensor3 = duration/US_ROUNDTRIP_CM;// convert time into distance
+        duration = sonar4.ping();// Send ping, get ping time in microseconds 
+        Sensor4 = duration/US_ROUNDTRIP_CM;// convert time into distance
+
+
+      myMotor->run(FORWARD);
+      myMotor2->run(FORWARD);
+      myMotor->setSpeed(70);
+      myMotor2->setSpeed(70);
+
+      Serial.println(Sensor2);
+      delay(2000);
+
+          Serial.println("i att ad vegg sensor 4:");
+          Serial.println(Sensor4);
+
+
+
+         if( Sensor2 < 40 && Sensor2!=0 && Sensor3 <40 && Sensor3!=0 ||  Sensor3 <40 && Sensor3!=0 && Sensor4 < 40 && Sensor4!=0 ){
+
+              Serial.println(" sensor4");
+              Serial.println(Sensor4);
+              Serial.println(" sensor3");
+              Serial.println(Sensor3);
+
+              myMotor->setSpeed(0);
+              myMotor2->setSpeed(0);
+              delay(25);
+              myservo.write(45);
+              delay(505);
+              break;
+              }
+        else if(Sensor4 >130){
+              myservo.write(60);
+              delay(15);
+              if(Sensor4 <120 && Sensor4!=0){
+                  myservo.write(80);
+                  delay(15);
+                  goto reynaaftur;
+              }
+          }
+  }
+  
+  while(1){
+      //beygir til haegri fra vegg
+          Serial.println("while lykkja 6");
+          /*SonarSensor(trigPin4, echoPin4);
+          Sensor4 = distance;
+          SonarSensor(trigPin3, echoPin3);
+          Sensor3 = distance;*/
+
+          myMotor->run(FORWARD);
+          myMotor2->run(FORWARD);
+          myMotor->setSpeed(60);
+          myMotor2->setSpeed(60);
+
+          Serial.println(Sensor2);
+          delay(3000);
+
+          myMotor->setSpeed(0);
+          myMotor2->setSpeed(0);
+          delay(25);
+          myservo.write(110);
+          delay(505);
+//beygir til vinstri,kominn framhja veggjum
+          myMotor->run(FORWARD);
+          myMotor2->run(FORWARD);
+          myMotor->setSpeed(70);
+          myMotor2->setSpeed(70);
+          delay(2000);
+          myMotor->setSpeed(0);
+          myMotor2->setSpeed(0);
+          break;
+
+
+}
+
+  
 }
 
 void loop() {
