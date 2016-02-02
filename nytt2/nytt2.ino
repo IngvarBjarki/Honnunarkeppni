@@ -17,7 +17,7 @@
 #define PING_PIN6 9
 #define PING_PIN7 13
 
-unsigned int duration,Sensor1,Sensor2,Sensor3,Sensor4,Sensor5,Sensor6,Sensor7, Sensor5old; 
+unsigned int duration,Sensor1,Sensor2,Sensor3,Sensor4,Sensor5,Sensor6,Sensor7,Sensor2old, Sensor3old, Sensor4old, Sensor5old; 
 unsigned long timeToMovieFw, timeToTurn;
 
 NewPing sonar1(PING_PIN1, PING_PIN1 );
@@ -89,7 +89,7 @@ delay(15);
             Serial.println("vinstri sensor");
             Serial.println(Sensor6);
 
-            myservo.write(30);
+            myservo.write(40);
             delay(15);
             break;
 
@@ -109,15 +109,17 @@ delay(15);
           Sensor2 = distance;*/
           myMotor->run(BACKWARD);
           myMotor2->run(BACKWARD);
-          myMotor->setSpeed(60);
-          myMotor2->setSpeed(60);
+          myMotor->setSpeed(70);
+          myMotor2->setSpeed(70);
 
 
           Serial.println(Sensor2);
-          if(Sensor2 <40&& Sensor2 !=0 && Sensor3<40&& Sensor3!=0){
+          if(Sensor2 <40&& Sensor2 !=0 && Sensor2old <40&& Sensor2old !=0 || Sensor3<40&& Sensor3!=0&& Sensor3old<40&& Sensor3old!=0){
             delay(500);
             Serial.println("sensor2");
             Serial.println(Sensor2);
+            Serial.println("sensor3");
+            Serial.println(Sensor3);
 
             myMotor->setSpeed(0);
             myMotor2->setSpeed(0);
@@ -127,6 +129,9 @@ delay(15);
             delay(505);
             break;
           }
+          Sensor2old=Sensor2;
+          Sensor3old=Sensor3;
+          //Sensor4old=Sensor4
     }
 
   while(1){
@@ -239,14 +244,14 @@ delay(15);
       myMotor2->setSpeed(70);
 
       Serial.println(Sensor2);
-      delay(2000);
+      //delay(2000);
 
           Serial.println("i att ad vegg sensor 4:");
           Serial.println(Sensor4);
 
 
 
-         if( Sensor2 < 40 && Sensor2!=0 && Sensor3 <40 && Sensor3!=0 ||  Sensor3 <40 && Sensor3!=0 && Sensor4 < 40 && Sensor4!=0 ){
+         if( (Sensor2 < 40 && Sensor2!=0 && Sensor3 <40 && Sensor3!=0 ||  Sensor3 <40 && Sensor3!=0 && Sensor4 < 40 && Sensor4!=0) && timeToTurn>2000){
 
               Serial.println(" sensor4");
               Serial.println(Sensor4);
