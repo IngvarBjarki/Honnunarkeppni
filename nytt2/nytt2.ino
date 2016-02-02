@@ -257,7 +257,7 @@ delay(15);
         myMotor2->setSpeed(0);
         delay(25);
         //setjum servoinn í 80 gráður þannig hann fari beint
-        myservo.write(80);
+        myservo.write(74);
         delay(505);
         break;
     }
@@ -372,7 +372,7 @@ delay(15);
           Serial.println(Sensor2);
           //delay(3000);
           
-          if(timeToTurn>3000 && Sensor5 > 10){
+          if(timeToTurn>2000 && Sensor5 > 10){
           myMotor->setSpeed(0);
           myMotor2->setSpeed(0);
           delay(25);
