@@ -191,6 +191,8 @@ delay(15);
               //stoppum
               myMotor->setSpeed(0);
               myMotor2->setSpeed(0);
+              //bíðum í 4 sek eftir að boltar fara oní 
+              delay(4000);
 
 
           delay(25);
@@ -345,7 +347,8 @@ delay(15);
   while(1){
       //beygir til haegri fra vegg
           Serial.println("while lykkja 6");
-
+          reynaaftur2:
+          timeToTurn = millis() - startTimeBw;
           duration = sonar5.ping();// Send ping, get ping time in microseconds 
         Sensor5 = duration/US_ROUNDTRIP_CM;// convert time into distance
           /*SonarSensor(trigPin4, echoPin4);
@@ -355,18 +358,19 @@ delay(15);
 
           myMotor->run(FORWARD);
           myMotor2->run(FORWARD);
-          myMotor->setSpeed(60);
-          myMotor2->setSpeed(60);
+          myMotor->setSpeed(70);
+          myMotor2->setSpeed(70);
 
           Serial.println(Sensor2);
-          delay(3000);
-
+          //delay(3000);
+          
+          if(timeToTurn>3000 && Sensor5 > 10){
           myMotor->setSpeed(0);
           myMotor2->setSpeed(0);
           delay(25);
           myservo.write(110);
           delay(505);
-          timeToTurn = millis() - startTimeBw;
+          //timeToTurn = millis() - startTimeBw;
           
 //beygir til vinstri,kominn framhja veggjum
           myMotor->run(FORWARD);
@@ -377,8 +381,32 @@ delay(15);
           myMotor->setSpeed(0);
           myMotor2->setSpeed(0);
           break;
+          }
 
+          //eða ef vinstra horn bílsins klessir á hliðarvegginn, skynjainn lengst til vinstri skynjar minna en 7 cm
+          else if(Sensor5<7 && Sensor5!=0 && Sensor5old<7 && Sensor5old != 0&& timeToTurn>2000){
+              /*startTimeBw = millis();
+              timeToTurn = millis() - startTimeBw;*/
+              myMotor->setSpeed(0);
+              myMotor2->setSpeed(0);
+              delay(25);
+              myservo.write(110);
+              delay(505);
 
+              myMotor->run(BACKWARD);
+              myMotor2->run(BACKWARD);
+              myMotor->setSpeed(70);
+              myMotor2->setSpeed(70);
+              delay(2000);
+              myMotor->setSpeed(0);
+              myMotor2->setSpeed(0);
+              delay(25);
+              myservo.write(80);
+              delay(505);
+              goto reynaaftur2;
+            }
+            Sensor5old=Sensor5;
+          
 }
 
   
