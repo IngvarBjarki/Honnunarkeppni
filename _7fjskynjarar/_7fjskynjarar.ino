@@ -2,13 +2,13 @@
 
 #include <NewPing.h>
 
-#define PING_PIN 8 // Arduino pin for both trig and echo
+#define PING_PIN 4 // Arduino pin for both trig and echo
 
-#define PING_PIN2 2 // Arduino pin for both trig and echo
-#define PING_PIN3 4
-#define PING_PIN4 6
-#define PING_PIN5 9
-#define PING_PIN6 11
+#define PING_PIN2 5 // Arduino pin for both trig and echo
+#define PING_PIN3 6
+#define PING_PIN4 7
+#define PING_PIN5 8
+#define PING_PIN6 9
 #define PING_PIN7 13 
 
 //        #define trigPin1 2

@@ -9,12 +9,12 @@
 #include <Servo.h>
 
 
-#define PING_PIN1 8 // Arduino pin for both trig and echo
-#define PING_PIN2 2 // Arduino pin for both trig and echo
-#define PING_PIN3 4
-#define PING_PIN4 6
-#define PING_PIN5 9
-#define PING_PIN6 11
+#define PING_PIN1 4 // Arduino pin for both trig and echo
+#define PING_PIN2 5 // Arduino pin for both trig and echo
+#define PING_PIN3 6
+#define PING_PIN4 7
+#define PING_PIN5 8
+#define PING_PIN6 9
 #define PING_PIN7 13
 
 unsigned int duration,Sensor1,Sensor2,Sensor3,Sensor4,Sensor5,Sensor6,Sensor7; 
@@ -25,11 +25,11 @@ NewPing sonar2(PING_PIN2, PING_PIN2 );
 NewPing sonar3(PING_PIN3, PING_PIN3 );
 NewPing sonar4(PING_PIN4, PING_PIN4 );
 NewPing sonar5(PING_PIN5, PING_PIN5 );
-NewPing sonar6(PING_PIN6, PING_PIN6 );
+//NewPing sonar6(PING_PIN6, PING_PIN6 );
 NewPing sonar7(PING_PIN7, PING_PIN7 );
 
 Servo myservo;
-Servo myservo2;
+//Servo myservo2;
 
      // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
@@ -39,7 +39,7 @@ Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 // Select which 'port' M1, M2, M3 or M4. In this case, M1
 Adafruit_DCMotor *myMotor = AFMS.getMotor(4);
 Adafruit_DCMotor *myMotor2 = AFMS.getMotor(1);
-Adafruit_DCMotor *armaMotor = AFMS.getMotor(3);
+Adafruit_DCMotor *lokMotor = AFMS.getMotor(3);
 // You can also make another motor on port M2
 //Adafruit_DCMotor *myOtherMotor = AFMS.getMotor(2);
 
@@ -50,10 +50,12 @@ void setup() {
   AFMS.begin(2000);  // create with the default frequency 1.6KHz
   //AFMS.begin(1000);  // OR with a different frequency, say 1KHz
   //delay(30);
- myservo2.attach(9);  // attaches the servo on pin 9 to the servo object
+ //myservo2.attach(9);  // attaches the servo on pin 9 to the servo object
 
   myservo.attach(10);  // attaches the servo on pin 9 to the servo
-
+  delay(15);
+//myservo2.write(50);
+delay(15);
   // Set the speed to start, from 0 (off) to 255 (max speed)
   myMotor->setSpeed(70);
   myMotor2->setSpeed(70);
@@ -70,17 +72,17 @@ void setup() {
 
         duration = sonar5.ping();// Send ping, get ping time in microseconds 
         Sensor5 = duration/US_ROUNDTRIP_CM;// convert time into distance
-        duration = sonar6.ping();// Send ping, get ping time in microseconds 
-        Sensor6 = duration/US_ROUNDTRIP_CM;// convert time into distance
+    //    duration = sonar6.ping();// Send ping, get ping time in microseconds 
+      //  Sensor6 = duration/US_ROUNDTRIP_CM;// convert time into distance
 
-        myservo.write(70);              // tell servo to go to position in variable 'pos'
+        myservo.write(80);              // tell servo to go to position in variable 'pos'
         servoinn = myservo.read();
 
         Serial.println("myservo is");
         Serial.println(servoinn);
 
 //skynjar sulu+raudan takka
-        if (Sensor6 < 35 && Sensor5 <35) {
+        if (/*Sensor6 < 35 && Sensor6 != 0 && */Sensor5 <35 && Sensor5 != 0) {
             delay(500);
             myMotor->setSpeed(0);
             myMotor2->setSpeed(0);
@@ -111,7 +113,7 @@ void setup() {
 
 
           Serial.println(Sensor2);
-          if(Sensor2 <40 && Sensor3<40){
+          if(Sensor2 <40&& Sensor2 !=0 && Sensor3<40&& Sensor3!=0){
             delay(500);
             Serial.println("sensor2");
             Serial.println(Sensor2);
