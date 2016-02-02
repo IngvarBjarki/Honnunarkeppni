@@ -59,7 +59,7 @@ void setup() {
 
   myservo.attach(10);  // attaches the servo on pin 9 to the servo
   delay(15);
-myservo2.write(100);
+myservo2.write(120);
 delay(15);
   // Set the speed to start, from 0 (off) to 255 (max speed)
   myMotor->setSpeed(70);
@@ -72,6 +72,8 @@ delay(15);
     //keyra afram i byrjun
   while(1){
 
+        Serial.println("servo armur");
+        Serial.println(myservo2.read());
         Serial.println("while lykkja 1");
         delay(50); // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay
         duration = sonar6.ping();// Send ping, get ping time in microseconds 
@@ -88,7 +90,7 @@ delay(15);
 
 //skynjar sulu+raudan takka
         if (/*Sensor6 < 35 && Sensor6 != 0 && */Sensor6 <35 && Sensor6 != 0 && Sensor6old<35 && Sensor6old!=0) {
-            delay(500);
+            delay(700);
             //Stoppar
             myMotor->setSpeed(0);
             myMotor2->setSpeed(0);
@@ -105,6 +107,8 @@ delay(15);
     while(1){
       //beygir thar til skynjar takka ad framan
          Serial.println("while lykkja 2");
+                 Serial.println("servo armur");
+        Serial.println(myservo2.read());
           delay(50); // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay
         //duration = sonar2.ping();// Send ping, get ping time in microseconds 
         //Sensor2 = duration/US_ROUNDTRIP_CM;// convert time into distance
@@ -125,7 +129,7 @@ delay(15);
 
           Serial.println(Sensor2);
           //Ef skynjar súlu með takka í minna en 40 cm fjarlægð
-          if(Sensor4 <40&& Sensor4 !=0 && Sensor4old <40&& Sensor4old !=0 && Sensor3<40&& Sensor3!=0&& Sensor3old<40&& Sensor3old!=0){
+          if(Sensor4 <40&& Sensor4 !=0 && Sensor4old <40&& Sensor4old !=0 || Sensor3<40&& Sensor3!=0&& Sensor3old<40&& Sensor3old!=0){
             delay(500);
             Serial.println("sensor3");
             Serial.println(Sensor3);
@@ -175,7 +179,7 @@ delay(15);
     Serial.println(Sensor2);
 
           //stoppum ef einher skynjari er kominn nógu nálægt rauða takkanum
-          if(Sensor2 <5 && Sensor2 !=0 || Sensor3 < 5 && Sensor3 !=0 ||Sensor4 < 5 &&Sensor4!=0 ||Sensor5 < 5 &&Sensor5!=0){
+          if(Sensor2 <10 && Sensor2 !=0 && Sensor2old <10 && Sensor2old !=0|| Sensor3 < 10 && Sensor3 !=0 && Sensor3old <10 && Sensor3old !=0||Sensor4 < 10 &&Sensor4!=0 && Sensor4old <10 && Sensor4old !=0||Sensor5 < 10 &&Sensor5!=0&&Sensor5old <10 && Sensor5old !=0){
 
               Serial.println(" sensor2");
               Serial.println(Sensor2);
@@ -201,6 +205,10 @@ delay(15);
           delay(505);
           break;
       }
+                Sensor4old=Sensor4;
+          Sensor3old=Sensor3;
+                    Sensor2old=Sensor2;
+          Sensor5old=Sensor5;
   }
 
   unsigned long startTimeBw = millis();
