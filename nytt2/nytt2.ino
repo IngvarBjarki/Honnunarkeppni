@@ -1,7 +1,7 @@
 
 
-//afram haegri gradur 30 <70
-//afram vinstri gradur 100 > 70
+//afram haegri gradur 30 <80
+//afram vinstri gradur 100 > 80
 
 #include <NewPing.h>
 #include <Wire.h>
@@ -104,6 +104,7 @@ delay(15);
             }
             Sensor6old=Sensor6;
     }
+    
     while(1){
       //beygir thar til skynjar takka ad framan
          Serial.println("while lykkja 2");
@@ -116,7 +117,8 @@ delay(15);
         Sensor3 = duration/US_ROUNDTRIP_CM;// convert time into distance
         duration = sonar4.ping();// Send ping, get ping time in microseconds 
         Sensor4 = duration/US_ROUNDTRIP_CM;// convert time into distance
-
+        duration = sonar5.ping();// Send ping, get ping time in microseconds 
+        Sensor5 = duration/US_ROUNDTRIP_CM;// convert time into distance
 
           /*SonarSensor(trigPin2, echoPin2);
           Sensor2 = distance;*/
@@ -127,9 +129,9 @@ delay(15);
           myMotor2->setSpeed(70);
 
 
-          Serial.println(Sensor2);
+          Serial.println(Sensor3);
           //Ef skynjar súlu með takka í minna en 40 cm fjarlægð
-          if(Sensor4 <40&& Sensor4 !=0 && Sensor4old <40&& Sensor4old !=0 || Sensor3<40&& Sensor3!=0&& Sensor3old<40&& Sensor3old!=0){
+          if(Sensor5 <40&& Sensor5 !=0 && Sensor4 <40&& Sensor4 !=0 || Sensor4 <40&& Sensor4 !=0 && Sensor4old <40&& Sensor4old !=0 || Sensor3<40&& Sensor3!=0&& Sensor3old<40&& Sensor3old!=0){
             delay(500);
             Serial.println("sensor3");
             Serial.println(Sensor3);
@@ -169,7 +171,6 @@ delay(15);
         duration = sonar5.ping();// Send ping, get ping time in microseconds 
         Sensor5 = duration/US_ROUNDTRIP_CM;// convert time into distance
 
-
     //keyrum beint áfram í átt að takka
     myMotor->run(FORWARD);
     myMotor2->run(FORWARD);
@@ -195,8 +196,8 @@ delay(15);
               //stoppum
               myMotor->setSpeed(0);
               myMotor2->setSpeed(0);
-              //bíðum í 4 sek eftir að boltar fara oní 
-              delay(4000);
+              //bíðum í 2 sek eftir að boltar fara oní 
+              delay(2000);
 
 
           delay(25);
@@ -205,9 +206,9 @@ delay(15);
           delay(505);
           break;
       }
-                Sensor4old=Sensor4;
+          Sensor4old=Sensor4;
           Sensor3old=Sensor3;
-                    Sensor2old=Sensor2;
+          Sensor2old=Sensor2;
           Sensor5old=Sensor5;
   }
 
@@ -233,8 +234,8 @@ delay(15);
         //bökkum
     myMotor->run(BACKWARD);
     myMotor2->run(BACKWARD);
-    myMotor->setSpeed(65);
-    myMotor2->setSpeed(65);
+    myMotor->setSpeed(70);
+    myMotor2->setSpeed(70);
 
     Serial.println(Sensor2);
     Serial.println("timeToMOvie");
@@ -243,7 +244,7 @@ delay(15);
     //skynjum fjærvegginn. þe. þegar þeir skynja meira en 60 cm og skynjarinn lengst til vinstri á bílnum skynjar minna en 120 cm
     //svo við vitum að hann er fyrir framan vegginn en er ekki að skynja út af brautinni
     //og bíllinn hefur verið að bakka í 2.6 sek amk
-    if(Sensor2>60&&Sensor3>60&&Sensor4>60&&Sensor5>60&&Sensor5<120 && (timeToMovieFw > 2600 /*&& timeToMovieFw < 4000*/ ) ){
+    if(Sensor2>60&&Sensor3>60&&Sensor4>60&&Sensor5>60&&Sensor5<120 && Sensor5old<120 && (timeToMovieFw > 2600 /*&& timeToMovieFw < 4000*/ ) ){
        //delay(1500);
         Serial.print(Sensor2);
         Serial.print("   ");
@@ -261,7 +262,9 @@ delay(15);
         delay(505);
         break;
     }
+    Sensor5old=Sensor5;
   }
+
 
   startTimeBw = millis();
   while(1){
@@ -270,7 +273,6 @@ delay(15);
       reynaaftur:
       //notum tíma þannig hann beygi ekki of snemma
       timeToTurn = millis() - startTimeBw;
-
         //notum alla skynjara að framan
         delay(50); // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay
         duration = sonar2.ping();// Send ping, get ping time in microseconds 
@@ -314,19 +316,25 @@ delay(15);
               break;
               }
 
-              //eða ef skynjarinn lengst til vinstri skynjar að bíllinn sé að kyra út af, þ.e. skynjar meira en 130 cm
+              //eða ef skynjarinn lengst til vinstri skynjar að bíllinn sé að keyra út af, þ.e. skynjar meira en 130 cm
         else if(Sensor5 >130){
           //látum servoinn í 65 graður svo hann fari ekki út af 
               myservo.write(65);
               delay(15);
+              while(Sensor5>120 ){
+              duration = sonar5.ping();// Send ping, get ping time in microseconds 
+              Sensor5 = duration/US_ROUNDTRIP_CM;// convert time into distance
+              //if(
+              }
               //ef skynjarinn lengst til vinstri er minna en 120 cm er hann ekki lengur að keyra út af svo förum beint
-              if(Sensor5 <120 && Sensor4!=0){
+              //if(Sensor5 <120 && Sensor4!=0){
                   myservo.write(80);
                   delay(15);
                   goto reynaaftur;
-              }
+              //}
+              
           }
-          //eða ef vinstra horn bílsins klessir á hliðarvegginn, skynjainn lengst til vinstri skynjar minna en 7 cm
+          //eða ef vinstra horn bílsins klessir á hliðarvegginn, skynjarinn lengst til vinstri skynjar minna en 7 cm
           else if(Sensor5<7 && Sensor5!=0 && Sensor5old<7 && Sensor5old != 0&& timeToTurn>2000){
               /*startTimeBw = millis();
               timeToTurn = millis() - startTimeBw;*/
@@ -385,9 +393,9 @@ delay(15);
           myMotor2->run(FORWARD);
           myMotor->setSpeed(70);
           myMotor2->setSpeed(70);
-          delay(2000);
+          /*delay(2000);
           myMotor->setSpeed(0);
-          myMotor2->setSpeed(0);
+          myMotor2->setSpeed(0);*/
           break;
           }
 
@@ -414,8 +422,22 @@ delay(15);
               goto reynaaftur2;
             }
             Sensor5old=Sensor5;
-          
-}
+          }
+
+          startTimeBw = millis();
+          while(1){
+            //keyrir fr' veggjum i att ad korfu
+                  Serial.println("while lykkja 7");
+            //notum tíma þannig hann beygi ekki of snemma
+            
+            timeToTurn = millis() - startTimeBw;
+            //notum alla skynjara að framan
+            delay(50); // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay
+            duration = sonar2.ping();// Send ping, get ping time in microseconds 
+            Sensor2 = duration/US_ROUNDTRIP_CM;// convert time into distance
+            
+          }
+
 
   
 }
