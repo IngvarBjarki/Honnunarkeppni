@@ -21,7 +21,7 @@
 #define PING_PIN9 12
 
 unsigned int duration,Sensor1,Sensor2,Sensor3,Sensor4,Sensor5,Sensor6,Sensor7,Sensor8, Sensor9,Sensor2old, Sensor3old, Sensor4old, Sensor5old, Sensor6old; 
-unsigned long timeToMovieFw, timeToTurn;
+unsigned long timeToMovieFw, timeToTurn, startTimeBw;
 
 NewPing sonar1(PING_PIN1, PING_PIN1 );
 NewPing sonar2(PING_PIN2, PING_PIN2 );
@@ -55,19 +55,19 @@ void setup() {
   AFMS.begin(2000);  // create with the default frequency 1.6KHz
   //AFMS.begin(1000);  // OR with a different frequency, say 1KHz
   //delay(30);
- myservo2.attach(9);  // attaches the servo on pin 9 to the servo object
+  myservo2.attach(9);  // attaches the servo on pin 9 to the servo object
 
   myservo.attach(10);  // attaches the servo on pin 9 to the servo
   delay(15);
-myservo2.write(120);
-delay(15);
+  myservo2.write(120);
+  delay(15);
   // Set the speed to start, from 0 (off) to 255 (max speed)
   myMotor->setSpeed(70);
   myMotor2->setSpeed(70);
   myMotor->run(FORWARD);
   myMotor2->run(FORWARD);
 
-    int servoinn;
+  int servoinn;
 
     //keyra afram i byrjun
   while(1){
@@ -88,7 +88,7 @@ delay(15);
         Serial.println("myservo is");
         Serial.println(servoinn);
 
-//skynjar sulu+raudan takka
+        //skynjar sulu+raudan takka
         if (/*Sensor6 < 35 && Sensor6 != 0 && */Sensor6 <35 && Sensor6 != 0 && Sensor6old<35 && Sensor6old!=0) {
             delay(700);
             //Stoppar
@@ -104,13 +104,15 @@ delay(15);
             }
             Sensor6old=Sensor6;
     }
-    
+
+    startTimeBw = millis();
     while(1){
       //beygir thar til skynjar takka ad framan
-         Serial.println("while lykkja 2");
-                 Serial.println("servo armur");
+      timeToMovieFw = millis() - startTimeBw;
+        Serial.println("while lykkja 2");
+        Serial.println("servo armur");
         Serial.println(myservo2.read());
-          delay(50); // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay
+        delay(50); // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay
         //duration = sonar2.ping();// Send ping, get ping time in microseconds 
         //Sensor2 = duration/US_ROUNDTRIP_CM;// convert time into distance
         duration = sonar3.ping();// Send ping, get ping time in microseconds 
@@ -131,7 +133,7 @@ delay(15);
 
           Serial.println(Sensor3);
           //Ef skynjar súlu með takka í minna en 40 cm fjarlægð
-          if(Sensor5 <40&& Sensor5 !=0 && Sensor4 <40&& Sensor4 !=0 || Sensor4 <40&& Sensor4 !=0 && Sensor4old <40&& Sensor4old !=0 || Sensor3<40&& Sensor3!=0&& Sensor3old<40&& Sensor3old!=0){
+          if((Sensor5 <40&& Sensor5 !=0 && Sensor4 <40&& Sensor4 !=0 || Sensor4 <40&& Sensor4 !=0 && Sensor4old <40&& Sensor4old !=0 || Sensor3<40&& Sensor3!=0&& Sensor3old<40&& Sensor3old!=0)&& timeToMovieFw>2000){
             delay(500);
             Serial.println("sensor3");
             Serial.println(Sensor3);
@@ -159,7 +161,7 @@ delay(15);
 
   while(1){
       //keyrir i att ad takka
-   Serial.println("while lykkja 3");
+    Serial.println("while lykkja 3");
         //notum skynjara 2-5 sem eru allir skynjarar að framan
         delay(50); // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay
         duration = sonar2.ping();// Send ping, get ping time in microseconds 
@@ -179,7 +181,7 @@ delay(15);
 
     Serial.println(Sensor2);
 
-          //stoppum ef einher skynjari er kominn nógu nálægt rauða takkanum
+          //stoppum ef einhver skynjari er kominn nógu nálægt rauða takkanum
           if(Sensor2 <10 && Sensor2 !=0 && Sensor2old <10 && Sensor2old !=0|| Sensor3 < 10 && Sensor3 !=0 && Sensor3old <10 && Sensor3old !=0||Sensor4 < 10 &&Sensor4!=0 && Sensor4old <10 && Sensor4old !=0||Sensor5 < 10 &&Sensor5!=0&&Sensor5old <10 && Sensor5old !=0){
 
               Serial.println(" sensor2");
@@ -212,7 +214,7 @@ delay(15);
           Sensor5old=Sensor5;
   }
 
-  unsigned long startTimeBw = millis();
+ startTimeBw = millis();
 
   while(1){
       //bakkar fra takka
@@ -324,14 +326,12 @@ delay(15);
               while(Sensor5>120 ){
               duration = sonar5.ping();// Send ping, get ping time in microseconds 
               Sensor5 = duration/US_ROUNDTRIP_CM;// convert time into distance
-              //if(
               }
               //ef skynjarinn lengst til vinstri er minna en 120 cm er hann ekki lengur að keyra út af svo förum beint
-              //if(Sensor5 <120 && Sensor4!=0){
                   myservo.write(80);
                   delay(15);
-                  goto reynaaftur;
-              //}
+                  //goto reynaaftur;
+              
               
           }
           //eða ef vinstra horn bílsins klessir á hliðarvegginn, skynjarinn lengst til vinstri skynjar minna en 7 cm
