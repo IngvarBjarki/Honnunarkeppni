@@ -10,34 +10,31 @@
 #include <Servo.h>
 
 
-#define PING_PIN1 4 // Arduino pin for both trig and echo
-#define PING_PIN2 5 // Arduino pin for both trig and echo
-#define PING_PIN3 6
-#define PING_PIN4 7
-#define PING_PIN5 8
-#define PING_PIN6 10
+#define PING_PIN4 4 // ljosastaur
+#define PING_PIN5 5 // framanhaegri
+#define PING_PIN6 7 //framanmidja
+#define PING_PIN7 8 //framanvinstri
+#define PING_PIN8 9 //vinstri
+#define PING_PIN9 10 // aftamvomstri
 //#define PING_PIN7 10
-#define PING_PIN8 11
-#define PING_PIN9 12
+#define PING_PIN10 11 //aftanhaegri
+//#define PING_PIN9 12
 
-unsigned int duration,Sensor1,Sensor2,Sensor3,Sensor4,Sensor5,Sensor6,Sensor7,Sensor8, Sensor9,Sensor2old, Sensor3old, Sensor4old, Sensor5old, Sensor6old; 
-unsigned long timeToMovieFw, timeToTurn;
+unsigned int duration,Sensorljosastaur,Sensorframanhaegri,Sensorframanhaegriold,Sensorframanmidja,Sensorframanmidjaold,Sensorframanvinstri,Sensorframanvinstriold,Sensorvinstri, Sensorvinstriold,Sensoraftanvinstri, Sensoraftanvinstriold, Sensoraftanhaegri, Sensoraftanhaegriold, Sensor6old; unsigned long timeToMovieFw, timeToTurn;
 int pushbutton = 3 ; // takki a hjolum
 int pushbutton2 = 2; // her eru enginn hjol
 
 
-NewPing sonar1(PING_PIN1, PING_PIN1 );
-NewPing sonar2(PING_PIN2, PING_PIN2 );
-NewPing sonar3(PING_PIN3, PING_PIN3 );
-NewPing sonar4(PING_PIN4, PING_PIN4 );
-NewPing sonar5(PING_PIN5, PING_PIN5 );
-NewPing sonar6(PING_PIN6, PING_PIN6 );
-//NewPing sonar7(PING_PIN7, PING_PIN7 );
-NewPing sonar8(PING_PIN8, PING_PIN8 );
-NewPing sonar9(PING_PIN9, PING_PIN9 );
+NewPing sonarljosastaur(PING_PIN4, PING_PIN4);
+NewPing sonarframanhaegri(PING_PIN5, PING_PIN5);
+NewPing sonarframanmidja(PING_PIN6, PING_PIN6);
+NewPing sonarframanvinstri(PING_PIN7, PING_PIN7);
+NewPing sonarvinstri(PING_PIN8, PING_PIN8);
+NewPing sonaraftanvinstri(PING_PIN9, PING_PIN9);
+NewPing sonaraftanhaegri(PING_PIN10, PING_PIN10);
 
-Servo myservo;
-Servo myservo2;
+Servo servobeygja;
+Servo servoarmur;
 
      // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
@@ -61,19 +58,19 @@ void setup() {
   pinMode(pushbutton, INPUT);
   pinMode(pushbutton2, INPUT);
     
-myservo2.attach(9);  // attaches the servo on pin 9 to the servo object
+servoarmur.attach(9);  // attaches the servo on pin 9 to the servo object
 
-myservo.attach(10);  // attaches the servo on pin 9 to the servo
+servobeygja.attach(10);  // attaches the servo on pin 9 to the servo
  
-myservo2.write(110);
+servoarmur.write(110);
 
 
-myservo.write(55); // beygjum til haegri
+servobeygja.write(55); // beygjum til haegri
 
       
   // Set the speed to start, from 0 (off) to 255 (max speed)
-  myMotor->setSpeed(90);
-  myMotor2->setSpeed(90);
+  myMotor->setSpeed(80);
+  myMotor2->setSpeed(80);
   myMotor->run(FORWARD);
   myMotor2->run(FORWARD);
 
@@ -86,241 +83,171 @@ myservo.write(55); // beygjum til haegri
      int buttonState = digitalRead(pushbutton);
      int buttonState2 = digitalRead(pushbutton2);
      int counter = 0;
-     Sensor1 = 0;
+
      // beygjum til haegri ad kannti
-     while(timeToSenz2 < 1150){
+     while(timeToSenz2 < 1050){
        timeToSenz2 = millis()-timeToSenz2;
        Serial.println("a ad vera 55");
-       Serial.println(myservo.read());
+       Serial.println(servobeygja.read());
        
      }
      
-     myservo2.write(3); // setjum arminn nidur
-     //delay(30);
+     servoarmur.write(3); // setjum arminn nidur
+     delay(600);
    
    //chillum adeins
      myMotor->setSpeed(0);
      myMotor2->setSpeed(0);
   
   // rettum bilinn vid
-     myservo.write(120);
+     servobeygja.write(111);
      //delay(10);
      Serial.println("a ad vera 120");
-     Serial.println(myservo.read());
+     Serial.println(servobeygja.read());
      
-    myMotor->setSpeed(100);
-    myMotor2->setSpeed(100);
+    myMotor->setSpeed(105);
+    myMotor2->setSpeed(105);
     myMotor->run(FORWARD);
     myMotor2->run(FORWARD);
-  
+    //buttonState = 1;
     int count = 0;
-    int pos = 120; // hofum 120 tvi myservo er i 120 svo breytum vid i while lykkjuni eftir tvi sem vid a
+    int pos = 110; // hofum 110 tvi myservo er i 120 svo breytum vid i while lykkjuni eftir tvi sem vid a
     while(1){
       int oldButtonState = buttonState;
       int oldButtonState2 = buttonState2;
-
+      Serial.println("Her er button state");
+      Serial.println(buttonState);
      
-     timeToSenz2 = millis()-timeToSenz2;
      
-          
-     if(Sensor1>50){
      
-     }
-     
-     else if(sensorar haegrameigin er staeri en vinstrameigin){
-     
-       count = count + 1
-       servo.write(pos - 1)
-     }
-     
-     else if(sensorar vintsrameigin staeri en haegrameigin){
-     count = count + 1
-     servo.write(pos+1)
-     }
-     
-     else if timeToSenz2>3600 && timeToSenz2 < 5000){
-       myservo.write(75);}
-       
-     else{
-       myservo.write(80);
-     }
-
-     
-     Serial.println("Seinni while, a ad vera 75");
-     Serial.println(myservo.read());
-      buttonState = digitalRead(pushbutton);
-      buttonState2 = digitalRead(pushbutton2);
-      
-      
-      //Serial.println(buttonState);
-      //counter = counter + 1;
-      /*if ((millis() - timeToSenz2) > 100){
-        myservo.write(70);
-      }*/
-      
-      
-      //delay(50); // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay
-      
-     /* if (timeToSenz % 50 == 0){
-        duration = sonar1.ping();// Send ping, get ping time in microseconds 
-        Sensor1 = duration/US_ROUNDTRIP_CM;
-        Serial.println("its time to Senz!");
-        Serial.println(timeToSenz);
-      }*/
-      
-      
-      if(Sensor1>90){
-        while (counter < 1000){
-        myMotor ->setSpeed(0);
-        myMotor2 -> setSpeed(0);
-        myservo.write(55);
-       
-        myMotor ->setSpeed(70);
-        myMotor2 -> setSpeed(70);
-        myMotor ->run(BACKWARD);
-        myMotor2 -> run(BACKWARD);
-        counter = counter + 1;
+       if (timeToSenz2>3600 && timeToSenz2 < 4000){
+          myMotor->setSpeed(70);
+          myMotor2->setSpeed(70);
+          myMotor->run(FORWARD);
+          myMotor2->run(FORWARD);
+          servobeygja.write(75);
         }
-        while(counter < 2000){
+         
+
+   
+       Serial.println("Seinni while, a ad vera 75");
+       Serial.println(servobeygja.read());
+        buttonState = digitalRead(pushbutton);
+        buttonState2 = digitalRead(pushbutton2);
+        
+        
+        
+         timeToSenz2 = millis()-timeToSenz2;
+       
+       // hofum 50ms milli skynjana
+       if (timeToSenz2 % 50 == 0){
+          duration = sonarljosastaur.ping();// Send ping, get ping time in microseconds 
+          Sensorljosastaur = duration/US_ROUNDTRIP_CM;
+          
+          Serial.println("its time to Senz!");
+          Serial.println(timeToSenz2);
+       
+       }
+       
+       if(Sensorljosastaur>=50){
+       
+          myMotor -> setSpeed(0);
+          myMotor2 -> setSpeed(0);
+          servobeygja.write(65);
+          delay(1000);
+          myMotor -> setSpeed(70);
+          myMotor2 -> setSpeed(70);
+          myMotor ->run(BACKWARD);
+          myMotor2 -> run(BACKWARD);
+       }
+        
+        
+        if(buttonState == 0 && oldButtonState == 1){
+          // forum i tessa if setningu ef takka gildi var ad breytast
+          Serial.println("Hallo fyrsta if lykkjan godan daginn");
+          Serial.println(buttonState);
+          Serial.println(oldButtonState);
+          Serial.println("bottun state out!");
+          myMotor ->setSpeed(0);
+          myMotor2 -> setSpeed(0);
+          
+          servobeygja.write(70);
+          servoarmur.write(0); // forum alla leid nidur, her er armur utfyrir braut
+          
+          myMotor ->setSpeed(90);
+          myMotor2 -> setSpeed(90);
+          myMotor ->run(FORWARD);
+          myMotor2 -> run(FORWARD);
+          
+          while(1){
+            Serial.println(buttonState2);
+            Serial.println("Kominn of langt!");
+            buttonState2 = digitalRead(pushbutton2);
             
-         myMotor ->setSpeed(0);
-         myMotor2 -> setSpeed(0);
-         myservo.write(100);
+            timeToSenz2 = millis()-timeToSenz2;
        
-         myMotor ->setSpeed(70);
-         myMotor2 -> setSpeed(70);
-         myMotor ->run(BACKWARD);
-         myMotor2 -> run(BACKWARD);
-          counter = counter+1;
-          }
+       // hofum 50ms milli skynjana
+       if (timeToSenz2 % 50 == 0){
+          duration = sonarljosastaur.ping();// Send ping, get ping time in microseconds 
+          Sensorljosastaur = duration/US_ROUNDTRIP_CM;
           
-         myMotor ->setSpeed(0);
-         myMotor2 -> setSpeed(0);
-         myservo.write(60);
+          duration = sonarframanhaegri.ping();// Send ping, get ping time in microseconds 
+          Sensorframanhaegri = duration/US_ROUNDTRIP_CM;
+          
+          duration = sonarframanmidja.ping();// Send ping, get ping time in microseconds 
+          Sensorframanmidja = duration/US_ROUNDTRIP_CM;
+          
+          duration = sonarframanvinstri.ping();// Send ping, get ping time in microseconds 
+          Sensorframanvinstri = duration/US_ROUNDTRIP_CM;
+          
+          Serial.println("its time to Senz!");
+          Serial.println(timeToSenz2);
        
-        myMotor ->setSpeed(90);
-        myMotor2 -> setSpeed(90);
-        myMotor ->run(FORWARD);
-        myMotor2 -> run(FORWARD);
-       
-      }
-      
-      if(buttonState == 0 && oldButtonState == 1 /*|| Sensor1 > 70*/ ){
-        // forum i tessa if setningu ef takka gildi var ad breytast
-        Serial.println("Hallo fyrsta if lykkjan godan daginn");
-        Serial.println(buttonState);
-        Serial.println(oldButtonState);
-        Serial.println("bottun state out!");
-        myMotor ->setSpeed(0);
-        myMotor2 -> setSpeed(0);
-        
-        myservo.write(90);
-        myservo2.write(0); // forum alla leid nidur, her er armur utfyrir braut
-        
-        myMotor ->setSpeed(90);
-        myMotor2 -> setSpeed(90);
-        myMotor ->run(FORWARD);
-        myMotor2 -> run(FORWARD);
-        
-        while(1){
-          Serial.println(buttonState2);
-          Serial.println("Kominn of langt!");
-          buttonState2 = digitalRead(pushbutton2);
-          if(buttonState2 == 0){
-            Serial.println("its hammer time!");
-             // nu vitum vid ad vid erum hja takkanum
-             break;
-    
-          }
-        }
-        myMotor->setSpeed(0);
-        myMotor2->setSpeed(0);
-        myservo2.write(120);
-        delay(1000);
-        myMotor->setSpeed(75);
-        myMotor2->setSpeed(75);
-        delay(1005);
-        myMotor->setSpeed(0);
-        myMotor2->setSpeed(0);
-        myservo2.write(10);
-        delay(1500);
-        myservo2.write(110);
-        Serial.println("We have hammerd!");
-        break;
-      }
-/*else if(Sensor1>70){
-        while (counter < 1000){
-        myMotor ->setSpeed(0);
-        myMotor -> setSpeed(0);
-        myservo.write(55);
-       
-        myMotor ->setSpeed(70);
-        myMotor -> setSpeed(70);
-        myMotor ->run(BACKWARD);
-        myMotor -> run(BACKWARD);
-        counter = counter + 1;
-        }
-        while(counter < 2000){
+       }
             
-         myMotor ->setSpeed(0);
-         myMotor -> setSpeed(0);
-         myservo.write(100);
+       if(Sensorljosastaur>=50){
+         servobeygja.write(82);
+         Serial.println("Ljosastaur > 50");
        
-         myMotor ->setSpeed(70);
-         myMotor -> setSpeed(70);
-         myMotor ->run(BACKWARD);
-         myMotor -> run(BACKWARD);
-          counter = counter+1;
-          }
-          
-         myMotor ->setSpeed(0);
-         myMotor -> setSpeed(0);
-         myservo.write(90);
+       }
        
-        myMotor ->setSpeed(70);
-        myMotor -> setSpeed(70);
-        myMotor ->run(FORWARD);
-        myMotor -> run(FORWARD);
+     /*  else if(Sensorframanhaegri - Sensorframanvinstri >= 0 && Sensorframanhaegri -  Sensorframanvinstri< 5 && Sensorframanvinstri != 0 ){
+           
+         count = count + 1;
+         servobeygja.write(pos - 1);
+         Serial.println("Sensorframanhaegri > sensorframanvinstri");
+       }
        
-      }
+       else if(Sensorframanvinstri - Sensorframanhaegri >= 0 && Sensorframanvinstri -  Sensorframanhaegri< 5 && Sensorframanhaegri != 0){
+         
+       count = count - 1;
+       servobeygja.write(pos+1);
+       Serial.println("Sensorframanvinstri > Sensor framan haegri");
+       }*/
+       
+                 
+            if(buttonState2 == 0){
+              Serial.println("its hammer time!");
+               // nu vitum vid ad vid erum hja takkanum
+               break;
       
-  */    
-    }
-  
-    
-    // keyrum a tima i midjuna og athugum hvort hornskynjararnir hafi somu gildi. þa er bilinn bein og vid reddy to go
-    unsigned long timeTomiddle = millis();
-    myservo.write(100);
-    myMotor->setSpeed(90);
-    myMotor2->setSpeed(90);
-    myMotor->run(FORWARD);
-    myMotor2->run(FORWARD);
-    
-    
-    while(1){
-    //timeTomiddle = timeTomiddle - millis();
-   /* if ((millis()-timeTomiddle) % 50 == 0){
-        duration = sonar2.ping();// Send ping, get ping time in microseconds 
-        Sensor2 = duration/US_ROUNDTRIP_CM;
-        duration = sonar5.ping();// Send ping, get ping time in microseconds 
-        Sensor5 = duration/US_ROUNDTRIP_CM;
-      }*/
-    /*  
-    if(timeTomiddle >= 4000 || Sensor2 == Sensor5 && Sensor2 != 0){
-      if(Sensor2 == Sensor5){
-        myMotor->setSpeed(0);
-        myMotor->setSpeed(0);
-        Serial.println("Billinn er rettur og kominn i loopu!!!");
-        myservo.write(80);
-        
-        myMotor->setSpeed(70);
-        myMotor->setSpeed(70);
-        myMotor->run(FORWARD);
-        myMotor2->run(FORWARD);
+            }
+          }
+          myMotor->setSpeed(0);
+          myMotor2->setSpeed(0);
+          servoarmur.write(120);
+          delay(1000);
+          myMotor->setSpeed(75);
+          myMotor2->setSpeed(75);
+          delay(1200);
+          myMotor->setSpeed(0);
+          myMotor2->setSpeed(0);
+          servoarmur.write(10);
+          delay(1500);
+          servoarmur.write(110);
+          Serial.println("We have hammerd!");
+          break;
+        }
       }
-    }
-    }*/
-}
-}
-
+       }
 void loop(){}
