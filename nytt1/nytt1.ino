@@ -321,7 +321,7 @@ while(1){
           myMotor2->run(FORWARD);
           myMotor->setSpeed(70);
           myMotor2->setSpeed(70);
-          delay(3000);
+          delay(2000);
           break;
 
 

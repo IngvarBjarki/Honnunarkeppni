@@ -12,10 +12,11 @@ void loop() {
   int buttonState = digitalRead(pushbutton);
     int buttonState2 = digitalRead(pushbutton2);
 
-
-  Serial.println(buttonState);
+  //takki ekki á hjóli 1 þegar takki er uppi 0 þegar hann er niðri
+  //Serial.println(buttonState);
     Serial.println("   ");
 
+  //takki á hjóli 1 þegar ýtt er á hann annars núll.
   Serial.println(buttonState2);
     Serial.println("\n");
 
