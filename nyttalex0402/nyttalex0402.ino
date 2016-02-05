@@ -276,10 +276,10 @@ void setup()
         if(Sensorframanhaegri <50 && Sensorframanhaegri >5 && Sensorframanhaegriold <50 && Sensorframanhaegriold >5 && Sensorframanmidja <50 && Sensorframanmidja >5 && Sensorframanmidjaold <50 && Sensorframanmidjaold >5 || Sensorframanvinstri<50 && Sensorframanvinstri>5 && Sensorframanvinstriold<50 && Sensorframanvinstriold>5 && Sensorframanmidja <50 && Sensorframanmidja >5 && Sensorframanmidjaold <50 && Sensorframanmidjaold >5 || Sensorframanvinstri<50 && Sensorframanvinstri>5 && Sensorframanvinstriold<50 && Sensorframanvinstriold>5 && Sensorframanhaegri <50 && Sensorframanhaegri >5 && Sensorframanhaegriold <50 && Sensorframanhaegriold >5){
           dcvinstri->setSpeed(0);
           dchaegri->setSpeed(0);
-          servobeygja.write(50);
+          servobeygja.write(40);
           delay(500);
-          dcvinstri->setSpeed(125);
-          dchaegri->setSpeed(60);
+          dcvinstri->setSpeed(135);
+          dchaegri->setSpeed(80);
           dcvinstri->run(FORWARD);
           dchaegri->run(FORWARD);
           break;
@@ -304,7 +304,7 @@ while(1){
         if(Sensorframanvinstri >60 && Sensorframanvinstriold >60 || Sensorframanmidja >60 && Sensorframanmidjaold >60){
           dcvinstri->setSpeed(0);
           dchaegri->setSpeed(0);
-          servobeygja.write(98);
+          servobeygja.write(97);
           delay(2000);
           dcvinstri->setSpeed(90);
           dchaegri->setSpeed(90);
@@ -329,7 +329,9 @@ while(1){
           Serial.println(Sensorframanmidja);
           Serial.println(Sensorframanvinstri);
           
-        if(Sensoraftanvinstri>40 && Sensoraftanvinstriold>40 && Sensoraftanhaegriold > 40 && Sensoraftanhaegri >40 && Sensoraftanvinstri<60 && Sensoraftanvinstriold<60 && Sensoraftanhaegriold < 60 && Sensoraftanhaegri <60){
+        if(Sensoraftanvinstri>40 && Sensoraftanvinstriold>40 && Sensoraftanhaegri > 40 && 
+        Sensoraftanhaegriold >40 && Sensoraftanvinstri<60 && Sensoraftanvinstriold<60 && 
+        Sensoraftanhaegriold < 60 && Sensoraftanhaegri <60){
           dcvinstri->setSpeed(0);
           dchaegri->setSpeed(0);
           servobeygja.write(79);
@@ -358,8 +360,8 @@ while(1){
           Serial.println(Sensorframanvinstri);
           
         if(Sensoraftanvinstri>110 && Sensoraftanvinstriold>110 && Sensoraftanhaegriold > 110 && Sensoraftanhaegri >110 ){
-          servobeygja.write(90);
-          delay(25);
+          servobeygja.write(70);
+          delay(5000);
           break;
           }
           Sensoraftanhaegriold=Sensoraftanhaegri;
@@ -377,10 +379,11 @@ while(1){
           Serial.println(Sensorframanmidja);
           Serial.println(Sensorframanvinstri);
           
-        if(Sensorljosastaur >35 && Sensorljosastaurold >35){
-          delay(4000);
+        if(Sensorljosastaur >35 && Sensorljosastaurold >35 || Sensoraftanvinstri>130 && Sensoraftanvinstriold>130 && Sensoraftanhaegriold > 130 && Sensoraftanhaegri >130){
           dcvinstri->setSpeed(0);
           dchaegri->setSpeed(0);
+          servobeygja.write(100);
+          delay(10000);
           servobeygja.write(100);
           delay(2000);
           dcvinstri->setSpeed(80);
@@ -392,7 +395,7 @@ while(1){
           Sensorljosastaurold=Sensorljosastaur;
           
 }
-
+/*
 while(1){
       //rettir sig af þegar beinn
           Serial.println("while lykkja 9");
@@ -452,7 +455,7 @@ while(1){
           
 }
 
-
+*/
 
 
 }
