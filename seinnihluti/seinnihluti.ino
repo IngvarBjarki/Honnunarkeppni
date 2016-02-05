@@ -192,8 +192,21 @@ servobeygja.write(55); // beygjum til haegri
           myMotor ->setSpeed(0);
           myMotor2 -> setSpeed(0);
           
-          servobeygja.write(70);
+          
           servoarmur.write(0); // forum alla leid nidur, her er armur utfyrir braut
+          
+          servobeygja.write(68);
+          timeToSenz = millis();
+          while(millis() - timeToSenz < 900){
+          // her erum vid i raun ad beygja i 700 ms 76 gradur sja ad ofan
+          }
+          
+          servobeygja.write(95);
+          timeToSenz = millis();
+          while(millis() - timeToSenz < 700){
+          // her erum vid i raun ad beygja i 700 ms 76 gradur sja ad ofan
+          }
+          servobeygja.write(80); // vonandi bunnir ad retta hann af og keyrum beint!
           
           myMotor ->setSpeed(90);
           myMotor2 -> setSpeed(90);
@@ -212,39 +225,31 @@ servobeygja.write(55); // beygjum til haegri
           duration = sonarljosastaur.ping();// Send ping, get ping time in microseconds 
           Sensorljosastaur = duration/US_ROUNDTRIP_CM;
           
-          duration = sonarframanhaegri.ping();// Send ping, get ping time in microseconds 
+         /* duration = sonarframanhaegri.ping();// Send ping, get ping time in microseconds 
           Sensorframanhaegri = duration/US_ROUNDTRIP_CM;
           
           duration = sonarframanmidja.ping();// Send ping, get ping time in microseconds 
           Sensorframanmidja = duration/US_ROUNDTRIP_CM;
           
           duration = sonarframanvinstri.ping();// Send ping, get ping time in microseconds 
-          Sensorframanvinstri = duration/US_ROUNDTRIP_CM;
+          Sensorframanvinstri = duration/US_ROUNDTRIP_CM;*/
           
           Serial.println("its time to Senz!");
-          Serial.println(timeToSenz2);
+          Serial.println(Sensorljosastaur);
        
        }
             
        if(Sensorljosastaur>=50){
+         timeToSenz = millis(); // getum ekki notad timetosenz2 tvi tad fokkar i while lykkjunni
+         if(millis()-timeToSenz < 300 && counter == 0){
+         servobeygja.write(100);
+         }
          servobeygja.write(82);
          Serial.println("Ljosastaur > 50");
+         counter++;
        
        }
        
-     /*  else if(Sensorframanhaegri - Sensorframanvinstri >= 0 && Sensorframanhaegri -  Sensorframanvinstri< 5 && Sensorframanvinstri != 0 ){
-           
-         count = count + 1;
-         servobeygja.write(pos - 1);
-         Serial.println("Sensorframanhaegri > sensorframanvinstri");
-       }
-       
-       else if(Sensorframanvinstri - Sensorframanhaegri >= 0 && Sensorframanvinstri -  Sensorframanhaegri< 5 && Sensorframanhaegri != 0){
-         
-       count = count - 1;
-       servobeygja.write(pos+1);
-       Serial.println("Sensorframanvinstri > Sensor framan haegri");
-       }*/
        
                  
             if(buttonState2 == 0){
@@ -260,15 +265,19 @@ servobeygja.write(55); // beygjum til haegri
           delay(1000);
           myMotor->setSpeed(75);
           myMotor2->setSpeed(75);
-          delay(1200);
+          delay(1500);
           myMotor->setSpeed(0);
           myMotor2->setSpeed(0);
           servoarmur.write(10);
           delay(1500);
-          servoarmur.write(110);
+          servoarmur.write(105);
           Serial.println("We have hammerd!");
           break;
         }
       }
        }
+       
+       // erum bunnir ad berja takkan forum nu og drullum tessari golf kulu nidur!
+       
+     
 void loop(){}
