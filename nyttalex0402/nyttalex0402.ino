@@ -16,6 +16,9 @@
 #define PING_PIN9 11 // aftanvinstri
 #define PING_PIN10 13 //aftanhaegri
 
+int takkihjol = 3;
+int takki = 2;
+
 unsigned int duration,Sensorljosastaur, Sensorljosastaurold, Sensorframanhaegri,Sensorframanhaegriold,Sensorframanmidja,Sensorframanmidjaold,Sensorframanvinstri,Sensorframanvinstriold,Sensorvinstri, Sensorvinstriold,Sensoraftanvinstri, Sensoraftanvinstriold, Sensoraftanhaegri, Sensoraftanhaegriold; 
 
 NewPing sonarljosastaur(PING_PIN4, PING_PIN4);
@@ -37,13 +40,15 @@ Adafruit_DCMotor *lokMotor = AFMS.getMotor(2);
 
 void setup() 
 {
-  Serial.begin(9600);          
+  Serial.begin(9600); 
+  pinMode(takkihjol, INPUT);
+  pinMode(takki, INPUT);         
   AFMS.begin(2000);
   delay(30);
   servoarmur.attach(9);  
   servobeygja.attach(10);  
   delay(15);
-  servoarmur.write(130);
+  servoarmur.write(120);
   delay(15);
   dcvinstri->setSpeed(80);
   dchaegri->setSpeed(80);
@@ -76,8 +81,8 @@ void setup()
             servobeygja.write(40);
             //Bakkar
             delay(25);
-            dcvinstri->setSpeed(125);
-            dchaegri->setSpeed(80);
+            dcvinstri->setSpeed(110);
+            dchaegri->setSpeed(110);
             dcvinstri->run(BACKWARD);
             dchaegri->run(BACKWARD);
             delay(250);
@@ -194,8 +199,8 @@ void setup()
       duration = sonarframanvinstri.ping();// Send ping, get ping time in microseconds 
       Sensorframanvinstri = duration/US_ROUNDTRIP_CM;// convert time into distance
 //bökkum
-      dcvinstri->setSpeed(100);
-      dchaegri->setSpeed(100);
+      dcvinstri->setSpeed(95);
+      dchaegri->setSpeed(85);
       dcvinstri->run(BACKWARD);
       dchaegri->run(BACKWARD);
       
@@ -203,7 +208,7 @@ void setup()
       Serial.println(Sensorframanmidja);
       Serial.println(Sensorframanvinstri);
       
-// skynjum suluna. passa ad ALLIR skynjarar seu lengra en 50cm fra sulu
+// skynjum suluna. passa ad ALLIR skynjarar seu lengra en 37cm fra sulu
         if(Sensorframanhaegri >37 && Sensorframanhaegriold >37 && Sensorframanmidja >37 && Sensorframanmidjaold >37 && Sensorframanvinstri>37  && Sensorframanvinstriold>37){
         Serial.println(Sensorframanhaegri);
         Serial.println(Sensorframanmidja);
@@ -216,8 +221,8 @@ void setup()
         servobeygja.write(45);
         delay(500);
         //förum beint áfram í átt að vegg
-        dcvinstri->setSpeed(110);
-        dchaegri->setSpeed(110);
+        dcvinstri->setSpeed(105);
+        dchaegri->setSpeed(105);
         dcvinstri->run(FORWARD);
         dchaegri->run(FORWARD);
         break;
@@ -273,13 +278,13 @@ void setup()
           Serial.println(Sensorframanmidja);
           Serial.println(Sensorframanvinstri);
           
-        if(Sensorframanhaegri <50 && Sensorframanhaegri >5 && Sensorframanhaegriold <50 && Sensorframanhaegriold >5 && Sensorframanmidja <50 && Sensorframanmidja >5 && Sensorframanmidjaold <50 && Sensorframanmidjaold >5 || Sensorframanvinstri<50 && Sensorframanvinstri>5 && Sensorframanvinstriold<50 && Sensorframanvinstriold>5 && Sensorframanmidja <50 && Sensorframanmidja >5 && Sensorframanmidjaold <50 && Sensorframanmidjaold >5 || Sensorframanvinstri<50 && Sensorframanvinstri>5 && Sensorframanvinstriold<50 && Sensorframanvinstriold>5 && Sensorframanhaegri <50 && Sensorframanhaegri >5 && Sensorframanhaegriold <50 && Sensorframanhaegriold >5){
+        if(Sensorframanhaegri <60 && Sensorframanhaegri >5 && Sensorframanhaegriold <60 && Sensorframanhaegriold >5 && Sensorframanmidja <60 && Sensorframanmidja >5 && Sensorframanmidjaold <60 && Sensorframanmidjaold >5 || Sensorframanvinstri<60 && Sensorframanvinstri>5 && Sensorframanvinstriold<60 && Sensorframanvinstriold>5 && Sensorframanmidja <60 && Sensorframanmidja >5 && Sensorframanmidjaold <60 && Sensorframanmidjaold >5 || Sensorframanvinstri<60 && Sensorframanvinstri>5 && Sensorframanvinstriold<60 && Sensorframanvinstriold>5 && Sensorframanhaegri <60 && Sensorframanhaegri >5 && Sensorframanhaegriold <60 && Sensorframanhaegriold >5){
           dcvinstri->setSpeed(0);
           dchaegri->setSpeed(0);
-          servobeygja.write(40);
+          servobeygja.write(55);
           delay(500);
-          dcvinstri->setSpeed(135);
-          dchaegri->setSpeed(80);
+          dcvinstri->setSpeed(90);
+          dchaegri->setSpeed(90);
           dcvinstri->run(FORWARD);
           dchaegri->run(FORWARD);
           break;
@@ -304,7 +309,7 @@ while(1){
         if(Sensorframanvinstri >60 && Sensorframanvinstriold >60 || Sensorframanmidja >60 && Sensorframanmidjaold >60){
           dcvinstri->setSpeed(0);
           dchaegri->setSpeed(0);
-          servobeygja.write(97);
+          servobeygja.write(98);
           delay(2000);
           dcvinstri->setSpeed(90);
           dchaegri->setSpeed(90);
@@ -329,11 +334,12 @@ while(1){
           Serial.println(Sensorframanmidja);
           Serial.println(Sensorframanvinstri);
           
-        if(Sensoraftanvinstri>40 && Sensoraftanvinstriold>40 && Sensoraftanhaegri > 40 && 
-        Sensoraftanhaegriold >40 && Sensoraftanvinstri<60 && Sensoraftanvinstriold<60 && 
-        Sensoraftanhaegriold < 60 && Sensoraftanhaegri <60){
+        if(Sensoraftanvinstri>20 && Sensoraftanvinstriold>20 && Sensoraftanhaegri > 20 && 
+        Sensoraftanhaegriold >20 && Sensoraftanvinstri<40 && Sensoraftanvinstriold<40 && 
+        Sensoraftanhaegriold <40 && Sensoraftanhaegri <40){
           dcvinstri->setSpeed(0);
           dchaegri->setSpeed(0);
+          delay(2000);
           servobeygja.write(79);
           delay(25);
           dcvinstri->setSpeed(80);
@@ -359,37 +365,73 @@ while(1){
           Serial.println(Sensorframanmidja);
           Serial.println(Sensorframanvinstri);
           
-        if(Sensoraftanvinstri>110 && Sensoraftanvinstriold>110 && Sensoraftanhaegriold > 110 && Sensoraftanhaegri >110 ){
-          servobeygja.write(70);
-          delay(5000);
+        if(Sensoraftanhaegriold > 40 && Sensoraftanhaegri >40 ){
+          servobeygja.write(72);
+          dcvinstri->setSpeed(0);
+          dchaegri->setSpeed(0);
+          delay(2000);
+          dcvinstri->setSpeed(85);
+          dchaegri->setSpeed(85);
           break;
           }
           Sensoraftanhaegriold=Sensoraftanhaegri;
-          Sensoraftanvinstriold=Sensoraftanvinstri;          
 }
 
 while(1){
       //keyrir ad brun
           Serial.println("while lykkja 8");
           delay(35); // Wait 40ms between pings (about 20 pings/sec). 29ms should be the shortest delay
-        duration = sonarljosastaur.ping();// Send ping, get ping time in microseconds 
-        Sensorljosastaur = duration/US_ROUNDTRIP_CM;// convert time into distance
+          duration = sonarljosastaur.ping();// Send ping, get ping time in microseconds 
+          Sensorljosastaur = duration/US_ROUNDTRIP_CM;// convert time into distance
+          servoarmur.write(3);
         
           Serial.println(Sensorljosastaur);
           Serial.println(Sensorframanmidja);
           Serial.println(Sensorframanvinstri);
           
-        if(Sensorljosastaur >35 && Sensorljosastaurold >35 || Sensoraftanvinstri>130 && Sensoraftanvinstriold>130 && Sensoraftanhaegriold > 130 && Sensoraftanhaegri >130){
+        if(Sensorljosastaur >35 && Sensorljosastaurold >35 ){
+
           dcvinstri->setSpeed(0);
           dchaegri->setSpeed(0);
-          servobeygja.write(100);
-          delay(10000);
-          servobeygja.write(100);
-          delay(2000);
-          dcvinstri->setSpeed(80);
-          dchaegri->setSpeed(80);
+          delay(25);
+          servobeygja.write(120);
+          delay(1000);
+          dcvinstri->setSpeed(120);
+          dchaegri->setSpeed(120);
           dcvinstri->run(FORWARD);
           dchaegri->run(FORWARD);
+          break;
+          }
+          Sensorljosastaurold=Sensorljosastaur;
+          
+}
+while(1){
+      //keyrir ad brun
+          Serial.println("while lykkja 8");
+          delay(35); // Wait 40ms between pings (about 20 pings/sec). 29ms should be the shortest delay
+          duration = sonarljosastaur.ping();// Send ping, get ping time in microseconds 
+          Sensorljosastaur = duration/US_ROUNDTRIP_CM;// convert time into distance
+          int statehjol = digitalRead(takkihjol);
+          int statetakki = digitalRead(takki);
+        
+          Serial.println(Sensorljosastaur);
+          Serial.println(Sensorframanmidja);
+          Serial.println(Sensorframanvinstri);
+          
+        if(statehjol==0){
+          dcvinstri->setSpeed(0);
+          dchaegri->setSpeed(0);
+          servoarmur.write(120);
+          servobeygja.write(79);
+          delay(10000);
+          dcvinstri->setSpeed(200);
+          dchaegri->setSpeed(0);
+          dcvinstri->run(BACKWARD);
+          dchaegri->run(FORWARD);
+          delay(500);
+          dcvinstri->setSpeed(0);
+          dchaegri->setSpeed(0);
+
           break;
           }
           Sensorljosastaurold=Sensorljosastaur;
