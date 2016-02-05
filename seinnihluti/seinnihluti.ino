@@ -80,6 +80,7 @@ servobeygja.write(55); // beygjum til haegri
     
     // keyrum eftir vasshliðið
     // servo i midju 80, 80+ fer bilinn til vinstri, laegra en 80 fer til haegri
+    start: // ef skynajarinn byrjar a undan takkanum forum id hingaad
      int buttonState = digitalRead(pushbutton);
      int buttonState2 = digitalRead(pushbutton2);
      int counter = 0;
@@ -93,7 +94,7 @@ servobeygja.write(55); // beygjum til haegri
      }
      
      servoarmur.write(3); // setjum arminn nidur
-     delay(600);
+     delay(650); // debouch utaf takka vesseni
    
    //chillum adeins
      myMotor->setSpeed(0);
@@ -125,7 +126,7 @@ servobeygja.write(55); // beygjum til haegri
           myMotor2->setSpeed(70);
           myMotor->run(FORWARD);
           myMotor2->run(FORWARD);
-          servobeygja.write(75);
+          servobeygja.write(78);
         }
          
 
@@ -154,11 +155,31 @@ servobeygja.write(55); // beygjum til haegri
           myMotor -> setSpeed(0);
           myMotor2 -> setSpeed(0);
           servobeygja.write(65);
+          buttonState = digitalRead(HIGH); // seigjum ad takkin se alltaf 1 og tokum arm upp
+          servoarmur.write(110);
           delay(1000);
-          myMotor -> setSpeed(70);
-          myMotor2 -> setSpeed(70);
-          myMotor ->run(BACKWARD);
-          myMotor2 -> run(BACKWARD);
+          while(Sensorljosastaur>=50){
+              if (timeToSenz2 % 50 == 0){
+              duration = sonarljosastaur.ping();// Send ping, get ping time in microseconds 
+              Sensorljosastaur = duration/US_ROUNDTRIP_CM;
+              
+              Serial.println("its time to Senz!");
+              Serial.println(timeToSenz2);
+           
+             }
+              myMotor -> setSpeed(70);
+              myMotor2 -> setSpeed(70);
+              myMotor ->run(BACKWARD);
+              myMotor2 -> run(BACKWARD);
+              Serial.println("ERUM I WHILEEEEEE");
+              Serial.println(Sensorljosastaur);
+         
+          }
+          //delay(1000);
+          servobeygja.write(82);
+          goto start; // byrjum uppa nytt
+          
+          Serial.println("SENSOR FRAMAN VIRKUR A UNDAN TAKKA HVAD SKAL GERA");
        }
         
         
