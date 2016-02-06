@@ -30,6 +30,7 @@ int timataka2;
 int timi2=0;
 unsigned int duration,Sensorljosastaur, Sensorljosastaurold, Sensorframanhaegri,Sensorframanhaegriold,Sensorframanmidja,Sensorframanmidjaold,Sensorframanvinstri,Sensorframanvinstriold,Sensorvinstri, Sensorvinstriold,Sensoraftanvinstri, Sensoraftanvinstriold, Sensoraftanhaegri, Sensoraftanhaegriold; 
 int oldtakki, oldtakkihjol;
+
 NewPing sonarljosastaur(PING_PIN4, PING_PIN4);
 NewPing sonarframanhaegri(PING_PIN5, PING_PIN5);
 NewPing sonarframanmidja(PING_PIN6, PING_PIN6);
@@ -60,6 +61,7 @@ void setup() {
 servoarmur.attach(9);  // attaches the servo on pin 9 to the servo object
 
 servobeygja.attach(10);  // attaches the servo on pin 9 to the servo
+ oldtakki = 1;
  
 servoarmur.write(110);
 
@@ -86,14 +88,14 @@ servobeygja.write(55); // beygjum til haegri
      int graduCounter = 0;
 
      // beygjum til haegri ad kannti
-     while(timeToSenz2 < 1050){
+     while(timeToSenz2 < 1350){
        timeToSenz2 = millis()-timeToSenz2;
        Serial.println("a ad vera 55");
        Serial.println(servobeygja.read());
        
      }
 
-     servoarmur.write(3); // setjum arminn nidur
+     servoarmur.write(5); // setjum arminn nidur
      delay(650); // debouch utaf takka vesseni
 
 servobeygja.write(79);
@@ -122,9 +124,15 @@ while(1){
           
         takkihjol = digitalRead(pushbutton);
         takki = digitalRead(pushbutton2);
+        Serial.println("fyrirr lykkju");
+        Serial.println(takkihjol);
+        Serial.println(takki);
 
     if(takki == 0 || oldtakki == 0 ){
       yttatakka:
+      Serial.println("Erum konnir i if lykkjjjuuunua");
+      Serial.println(takkihjol);
+      Serial.println(takki);
       
       break;
     }
@@ -433,6 +441,7 @@ delay(30);
 dcvinstri->setSpeed(0);
 dchaegri->setSpeed(0);
 do{
+  Serial.println("KOMINN I INGVARS!!");
   delay(50);
     duration = sonarljosastaur.ping();// Send ping, get ping time in microseconds 
           Sensorljosastaur = duration/US_ROUNDTRIP_CM;
@@ -612,8 +621,8 @@ do{
         delay(1000);
         servobeygja.write(65);
         
-        dcvinstri->setSpeed(90);
-        dchaegri->setSpeed(90);
+        dcvinstri->setSpeed(110);
+        dchaegri->setSpeed(110);
         dcvinstri -> run(FORWARD);
         dchaegri -> run(FORWARD);
         counter = 0;
@@ -644,8 +653,8 @@ do{
     
 servobeygja.write(80);    
 
-        dcvinstri->setSpeed(150);
-        dchaegri->setSpeed(150);
+        dcvinstri->setSpeed(200);
+        dchaegri->setSpeed(200);
         dcvinstri -> run(FORWARD);
         dchaegri -> run(FORWARD);
 
