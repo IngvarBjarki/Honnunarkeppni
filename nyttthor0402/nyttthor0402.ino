@@ -19,7 +19,7 @@
 int pushbutton = 3; //a hjoli
 int pushbutton2 = 2; // takki a hlid
 float hradafasti=1;
-float timafasti=1.4;
+float timafasti=1;
 
 int counter2 =0;
 int ljosastaurgildi=30;
@@ -180,7 +180,7 @@ timataka=millis();
 
 //stoppum ef einhver skynjari er kominn nógu nálægt rauða takkanum
         if(Sensorframanhaegri <5 && Sensorframanhaegri >1 && Sensorframanhaegriold <5 && Sensorframanhaegriold >1 || Sensorframanmidja <5 && Sensorframanmidja >1 && Sensorframanmidjaold <5 && Sensorframanmidjaold >1 || Sensorframanvinstri<5 && Sensorframanvinstri>1 && Sensorframanvinstriold<5 && Sensorframanvinstriold>1|| timi>7000){
-          delay(1000);
+          delay(1200);
           Serial.println(Sensorframanhaegri);
           Serial.println(Sensorframanmidja);
           Serial.println(Sensorframanvinstri);
@@ -189,7 +189,7 @@ timataka=millis();
           dchaegri->setSpeed(0);
 
           //bíðum í 1 sek eftir að boltar fara oní 
-          delay(1000);
+          delay(1300);
           break;
       }
           Sensorframanhaegriold=Sensorframanhaegri;
@@ -297,7 +297,7 @@ timataka=millis();
           Serial.println(Sensorframanvinstri);
 
           //beygir til haegri framhja seinni vegg
-        if(Sensorframanhaegri <55 && Sensorframanhaegri >5 && Sensorframanhaegriold <55 && Sensorframanhaegriold >5 && Sensorframanmidja <55 && Sensorframanmidja >5 && Sensorframanmidjaold <55 && Sensorframanmidjaold >5 || Sensorframanvinstri<55 && Sensorframanvinstri>5 && Sensorframanvinstriold<55 && Sensorframanvinstriold>5 && Sensorframanmidja <55 && Sensorframanmidja >5 && Sensorframanmidjaold <55 && Sensorframanmidjaold >5 || Sensorframanvinstri<55 && Sensorframanvinstri>5 && Sensorframanvinstriold<55 && Sensorframanvinstriold>5 && Sensorframanhaegri <55 && Sensorframanhaegri >5 && Sensorframanhaegriold <55 && Sensorframanhaegriold >5){
+        if(Sensorframanhaegri <60 && Sensorframanhaegri >5 && Sensorframanhaegriold <60 && Sensorframanhaegriold >5 && Sensorframanmidja <60 && Sensorframanmidja >5 && Sensorframanmidjaold <60 && Sensorframanmidjaold >5 || Sensorframanvinstri<60 && Sensorframanvinstri>5 && Sensorframanvinstriold<60 && Sensorframanvinstriold>5 && Sensorframanmidja <60 && Sensorframanmidja >5 && Sensorframanmidjaold <55 && Sensorframanmidjaold >5 || Sensorframanvinstri<60 && Sensorframanvinstri>5 && Sensorframanvinstriold<60 && Sensorframanvinstriold>5 && Sensorframanhaegri <60 && Sensorframanhaegri >5 && Sensorframanhaegriold <60 && Sensorframanhaegriold >5){
           dcvinstri->setSpeed(0);
           dchaegri->setSpeed(0);
           servobeygja.write(55);
@@ -344,7 +344,7 @@ while(1){
           break;
           }
           //ef of langur timi lidur tha er hann klesstur a fjaervegginn og vid bokkum og rettum okkur af til ad komast i gegn
-          else if(timi>5000){
+          else if(timi>8000){
           dcvinstri->setSpeed(0);
           dchaegri->setSpeed(0);
           servobeygja.write(100);
@@ -352,7 +352,7 @@ while(1){
           dchaegri->setSpeed(90);
           dcvinstri->run(BACKWARD);
           dchaegri->run(BACKWARD);
-          delay(1200);
+          delay(500);
           dcvinstri->setSpeed(0);
           dchaegri->setSpeed(0);
           servobeygja.write(80);
@@ -373,7 +373,7 @@ while(1){
                 dchaegri->setSpeed(90);
                 dcvinstri->run(BACKWARD);
                 dchaegri->run(BACKWARD);
-                delay(1000);
+                delay(700);
                 servoarmur.write(5);
                 delay(600);
                 timataka=millis();
@@ -414,7 +414,7 @@ while(1){
           break;
           }
           //ef of langur timi lidur tha er hann klesstur a fjaervegginn og vid bokkum og rettum okkur af til ad komast i gegn
-          else if(timi>6000){
+          else if(timi>7000){
           dcvinstri->setSpeed(0);
           dchaegri->setSpeed(0);
           servobeygja.write(100);
@@ -441,7 +441,7 @@ while(1){
                 dchaegri->setSpeed(90);
                 dcvinstri->run(BACKWARD);
                 dchaegri->run(BACKWARD);
-                delay(1000);
+                delay(700);
                 servoarmur.write(5);
                 delay(600);
                 break;
@@ -671,10 +671,11 @@ timataka=millis();
     dchaegri->setSpeed(80*hradafasti);
     dcvinstri->run(FORWARD);
     dchaegri->run(FORWARD);
-    if(timi>1500){
+    if(timi>2300){
       dcvinstri->setSpeed(0);
        dchaegri->setSpeed(0);
       delay(30);
+      break;
     }
   }
 
