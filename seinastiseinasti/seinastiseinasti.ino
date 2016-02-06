@@ -57,7 +57,7 @@ servobeygja.attach(10);  // attaches the servo on pin 9 to the servo
  
 unsigned long timeToSenz, timeToSenz2;
 
-
+int graduCounter;
 
 
 servobeygja.write(80);
@@ -114,6 +114,7 @@ myMotor2->run(BACKWARD);
 Serial.println("GOING BACKWARDS!!");
 
 counter = 0;
+graduCounter = 0;
 
 do{
   delay(50);
@@ -136,11 +137,11 @@ do{
             Serial.println(Sensorframanhaegri);
           }
           else if(Sensorframanvinstri > 121 || Sensorframanhaegri > 121){
-              servobeygja.write(83);
+              servobeygja.write(75);
 
               myMotor->setSpeed(70);
               myMotor2->setSpeed(70);
-              delay(80);
+              //delay(80);
               myMotor->run(FORWARD);
               myMotor2->run(FORWARD);
                //delay(200);
@@ -151,16 +152,17 @@ do{
 } 
 
 else if (Sensorframanvinstri<= 118 || Sensorframanhaegri<=118){
-              servobeygja.write(77);
+              servobeygja.write(83);
               myMotor->setSpeed(70);
               myMotor2->setSpeed(70);
-              delay(10);
+              delay(70);
               myMotor->run(BACKWARD);
               myMotor2->run(BACKWARD);
                Serial.println("FORUM FAEr 2222222222222222222");
             Serial.println(Sensorframanvinstri);
             Serial.println(Sensorframanhaegri);
             counter = 0;
+            graduCounter++;
 
 }
   
@@ -173,7 +175,8 @@ myMotor->setSpeed(0);
 myMotor2->setSpeed(0);
 
 counter = 0;
-servobeygja.write(91);
+graduCounter = graduCounter/4;
+servobeygja.write(92+graduCounter);
 myMotor->setSpeed(90);
 myMotor2->setSpeed(90);
 myMotor->run(FORWARD);
