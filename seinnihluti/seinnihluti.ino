@@ -10,15 +10,14 @@
 #include <Servo.h>
 
 
-#define PING_PIN4 4 // ljosastaur
-#define PING_PIN5 5 // framanhaegri
-#define PING_PIN6 7 //framanmidja
-#define PING_PIN7 8 //framanvinstri
-#define PING_PIN8 9 //vinstri
-#define PING_PIN9 10 // aftamvomstri
-//#define PING_PIN7 10
-#define PING_PIN10 11 //aftanhaegri
-//#define PING_PIN9 12
+#define PING_PIN4 4 //ljosastaur
+#define PING_PIN5 5 //framanhaegri
+#define PING_PIN6 12 //framanmidja
+#define PING_PIN7 7 //framanvinstri
+#define PING_PIN8 8 //vinstri
+#define PING_PIN9 11 // aftanvinstri
+#define PING_PIN10 13 //aftanhaegri
+
 
 unsigned int duration,Sensorljosastaur,Sensorframanhaegri,Sensorframanhaegriold,Sensorframanmidja,Sensorframanmidjaold,Sensorframanvinstri,Sensorframanvinstriold,Sensorvinstri, Sensorvinstriold,Sensoraftanvinstri, Sensoraftanvinstriold, Sensoraftanhaegri, Sensoraftanhaegriold, Sensor6old; unsigned long timeToMovieFw, timeToTurn;
 int pushbutton = 3 ; // takki a hjolum
@@ -84,6 +83,7 @@ servobeygja.write(55); // beygjum til haegri
      int buttonState = digitalRead(pushbutton);
      int buttonState2 = digitalRead(pushbutton2);
      int counter = 0;
+     int graduCounter = 0;
 
      // beygjum til haegri ad kannti
      while(timeToSenz2 < 1050){
@@ -191,15 +191,20 @@ servobeygja.write(55); // beygjum til haegri
           Serial.println("bottun state out!");
           myMotor ->setSpeed(0);
           myMotor2 -> setSpeed(0);
+          delay(100);
+          myMotor ->setSpeed(70);
+          myMotor2 -> setSpeed(70);
+          myMotor -> run(FORWARD);
+          myMotor2 -> run(FORWARD);
           
           
-          servoarmur.write(0); // forum alla leid nidur, her er armur utfyrir braut
           
           servobeygja.write(68);
           timeToSenz = millis();
-          while(millis() - timeToSenz < 900){
+          while(millis() - timeToSenz < 700){
           // her erum vid i raun ad beygja i 700 ms 76 gradur sja ad ofan
           }
+          servoarmur.write(0); // forum alla leid nidur, her er armur utfyrir braut
           
           servobeygja.write(95);
           timeToSenz = millis();
@@ -275,9 +280,215 @@ servobeygja.write(55); // beygjum til haegri
           break;
         }
       }
+      
+      
+servobeygja.write(80);
+myMotor->setSpeed(90);
+myMotor2->setSpeed(90);
+myMotor->run(FORWARD);
+myMotor2->run(FORWARD);
+counter = 0;
+
+do{
+  delay(50);
+    duration = sonarljosastaur.ping();// Send ping, get ping time in microseconds 
+          Sensorljosastaur = duration/US_ROUNDTRIP_CM;
+          
+          duration = sonarframanhaegri.ping();// Send ping, get ping time in microseconds 
+          Sensorframanhaegri = duration/US_ROUNDTRIP_CM;
+          
+          duration = sonarframanmidja.ping();// Send ping, get ping time in microseconds 
+          Sensorframanmidja = duration/US_ROUNDTRIP_CM;
+          
+          duration = sonarframanvinstri.ping();// Send ping, get ping time in microseconds 
+          Sensorframanvinstri = duration/US_ROUNDTRIP_CM;
+          
+          //faum hann rettan
+          if(Sensorframanvinstri > Sensorframanhaegri + 2 && Sensorframanhaegri != 0 && Sensorframanvinstri!= 0){
+          servobeygja.write(78);
+          Serial.println("VINSTRI ER STARERI");
+          }
+          else if(Sensorframanhaegri > Sensorframanvinstri + 2 && Sensorframanhaegri != 0 && Sensorframanvinstri!= 0){
+          servobeygja.write(83);
+          Serial.println("HAEGRI ER STAERIII");
+          }
+          
+          else if(abs(Sensorframanvinstri - Sensorframanhaegri) < 3 && Sensorframanhaegri != 0 && Sensorframanvinstri!= 0 ){
+            counter++;
+            servobeygja.write(80);  
+            Serial.println("FIRST COUNTER!!!");
+          }
+  
+}
+while(counter < 2);
+
+
+
+// finnum stad sem vid viljum keyra fra
+myMotor->setSpeed(0);
+myMotor2->setSpeed(0);
+
+delay(50);
+myMotor->setSpeed(70);
+myMotor2->setSpeed(70);
+myMotor->run(BACKWARD);
+myMotor2->run(BACKWARD);
+Serial.println("GOING BACKWARDS!!");
+
+counter = 0;
+graduCounter = 0;
+
+do{
+  delay(50);
+    duration = sonarljosastaur.ping();// Send ping, get ping time in microseconds 
+          Sensorljosastaur = duration/US_ROUNDTRIP_CM;
+          
+          duration = sonarframanhaegri.ping();// Send ping, get ping time in microseconds 
+          Sensorframanhaegri = duration/US_ROUNDTRIP_CM;
+          
+          duration = sonarframanmidja.ping();// Send ping, get ping time in microseconds 
+          Sensorframanmidja = duration/US_ROUNDTRIP_CM;
+          
+          duration = sonarframanvinstri.ping();// Send ping, get ping time in microseconds 
+          Sensorframanvinstri = duration/US_ROUNDTRIP_CM;
+          
+          if(Sensorframanvinstri <= 122 && Sensorframanvinstri >118 && Sensorframanhaegri <= 122  && Sensorframanhaegri>118 ){
+            counter++;
+            Serial.println("WE ARE COUNTING, lefty");
+            Serial.println(Sensorframanvinstri);
+            Serial.println(Sensorframanhaegri);
+          }
+          else if(Sensorframanvinstri > 121 || Sensorframanhaegri > 121){
+              servobeygja.write(75);
+
+              myMotor->setSpeed(70);
+              myMotor2->setSpeed(70);
+              //delay(80);
+              myMotor->run(FORWARD);
+              myMotor2->run(FORWARD);
+               //delay(200);
+            Serial.println("FORUM NAER1111111111");
+            Serial.println(Sensorframanvinstri);
+            Serial.println(Sensorframanhaegri);
+            counter = 0;
+} 
+
+else if (Sensorframanvinstri<= 118 || Sensorframanhaegri<=118){
+              servobeygja.write(83);
+              myMotor->setSpeed(70);
+              myMotor2->setSpeed(70);
+              delay(70);
+              myMotor->run(BACKWARD);
+              myMotor2->run(BACKWARD);
+               Serial.println("FORUM FAEr 2222222222222222222");
+            Serial.println(Sensorframanvinstri);
+            Serial.println(Sensorframanhaegri);
+            counter = 0;
+            graduCounter++;
+
+}
+  
+         
+}
+while(counter < 3);
+
+
+myMotor->setSpeed(0);
+myMotor2->setSpeed(0);
+
+counter = 0;
+graduCounter = graduCounter/4; // kannski ekki 
+servobeygja.write(92+graduCounter);
+myMotor->setSpeed(90);
+myMotor2->setSpeed(90);
+myMotor->run(FORWARD);
+myMotor2->run(FORWARD);
+
+
+
+// her byrjum vid ad keyra boltann ofani
+do{
+  Serial.println("erum i dowhile 2");
+  //if (timeToSenz2 % 50 == 0){    
+   
+  delay(50);
+    duration = sonarljosastaur.ping();// Send ping, get ping time in microseconds 
+          Sensorljosastaur = duration/US_ROUNDTRIP_CM;
+          
+          duration = sonarframanhaegri.ping();// Send ping, get ping time in microseconds 
+          Sensorframanhaegri = duration/US_ROUNDTRIP_CM;
+          
+          duration = sonarframanmidja.ping();// Send ping, get ping time in microseconds 
+          Sensorframanmidja = duration/US_ROUNDTRIP_CM;
+          
+          duration = sonarframanvinstri.ping();// Send ping, get ping time in microseconds 
+          Sensorframanvinstri = duration/US_ROUNDTRIP_CM;
+          
+          Serial.println("TIME TO SENZ!!!");
+          Serial.println(Sensorframanhaegri);
+          Serial.println(Sensorframanmidja); 
+          Serial.println(Sensorframanvinstri);
+      
+      if ((Sensorframanhaegri < 55 && Sensorframanhaegri > 15) && (Sensorframanmidja < 55  &&  Sensorframanmidja > 15 ) && (Sensorframanvinstri < 55  &&  Sensorframanvinstri > 15)&& Sensorframanvinstri != 0 && Sensorframanmidja != 0 && Sensorframanhaegri != 0){
+      counter++;
+      Serial.println("HER ER COUNTER");
+      Serial.println(counter);
+      }
+        Serial.println(Sensorframanvinstri);
+      }while((Sensorframanhaegri > 55 || Sensorframanhaegri < 15) && (Sensorframanmidja > 55 || Sensorframanmidja < 15 ) && (Sensorframanvinstri > 55 || Sensorframanvinstri < 15) && counter < 5 );
+        
+        myMotor->setSpeed(0);
+        myMotor2->setSpeed(0);
+        delay(1000);
+        servobeygja.write(65);
+        
+        myMotor->setSpeed(90);
+        myMotor2->setSpeed(90);
+        myMotor -> run(FORWARD);
+        myMotor2 -> run(FORWARD);
+        counter = 0;
+        
+        do{
+  Serial.println("erum i dowhile 2");
+  if (timeToSenz2 % 50 == 0){
+          duration = sonarljosastaur.ping();// Send ping, get ping time in microseconds 
+          Sensorljosastaur = duration/US_ROUNDTRIP_CM;
+          
+          duration = sonarframanhaegri.ping();// Send ping, get ping time in microseconds 
+          Sensorframanhaegri = duration/US_ROUNDTRIP_CM;
+          
+          duration = sonarframanmidja.ping();// Send ping, get ping time in microseconds 
+          Sensorframanmidja = duration/US_ROUNDTRIP_CM;
+          
+          duration = sonarframanvinstri.ping();// Send ping, get ping time in microseconds 
+          Sensorframanvinstri = duration/US_ROUNDTRIP_CM;
+          
+          Serial.println("TIME TO SENZ SEINNI PARTUR!!!");
+        }
+        Serial.println(Sensorframanvinstri);
+        if(abs(Sensorframanvinstri - Sensorframanhaegri)<2)
+        {
+        counter++;
+        }
+      }while(counter < 2 );
+    
+servobeygja.write(80);    
+
+        myMotor->setSpeed(150);
+        myMotor2->setSpeed(150);
+        myMotor -> run(FORWARD);
+        myMotor2 -> run(FORWARD);
+
+      
+      
+      
+      
+      
        }
        
        // erum bunnir ad berja takkan forum nu og drullum tessari golf kulu nidur!
+       
+       
        
      
 void loop(){}
