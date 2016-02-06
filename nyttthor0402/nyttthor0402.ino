@@ -18,8 +18,11 @@
 
 int pushbutton = 3; //a hjoli
 int pushbutton2 = 2; // takki a hlid
-int ljosastaurgildi=30;
 
+int ljosastaurgildi=30;
+int counter=0;
+int timataka2;
+int timi2=0;
 unsigned int duration,Sensorljosastaur, Sensorljosastaurold, Sensorframanhaegri,Sensorframanhaegriold,Sensorframanmidja,Sensorframanmidjaold,Sensorframanvinstri,Sensorframanvinstriold,Sensorvinstri, Sensorvinstriold,Sensoraftanvinstri, Sensoraftanvinstriold, Sensoraftanhaegri, Sensoraftanhaegriold; 
 
 NewPing sonarljosastaur(PING_PIN4, PING_PIN4);
@@ -46,7 +49,7 @@ void setup()
   pinMode(pushbutton2, INPUT);
   int takkihjol, oldtakkihjol; //= digitalRead(pushbutton);
   int takki, oldtakki; //= digitalRead(pushbutton2);  
-     
+  //pinMode(2, INPUT); 
   AFMS.begin(2000);
   delay(30);
   servoarmur.attach(9);  
@@ -188,6 +191,9 @@ void setup()
   }
 
 
+//thetta er bara til ad byrja hja takkanum
+//servobeygja.write(79);
+//delay(30);
   while(1){
     //bakkar fra takka
       Serial.println("while lykkja 4");
@@ -363,6 +369,7 @@ while(1){
                 delay(1000);
                 servoarmur.write(5);
                 delay(600);
+                timataka=millis();
                 goto while9;
           }
           
@@ -439,11 +446,14 @@ while(1){
           Sensorljosastaurold=Sensorljosastaur;         
 }
 
+timataka=millis();
+
 //nidri med arminn rettir sig af
 while(1){
         Serial.println("while lykkja 9");
         while9:
-        delay(50); // Wait 40ms between pings (about 20 pings/sec). 29ms should be the shortest delay
+        timi=millis()-timataka;
+        delay(50); // Wait 40ms between pings (about 20 pings/sec). 29ms should be the shortest delayMicroseconds
         duration = sonaraftanvinstri.ping();// Send ping, get ping time in microseconds 
         Sensoraftanvinstri = duration/US_ROUNDTRIP_CM;// convert time into distance
         duration = sonaraftanhaegri.ping();// Send ping, get ping time in microseconds 
@@ -459,9 +469,34 @@ while(1){
         takkihjol = digitalRead(pushbutton);
         takki = digitalRead(pushbutton2);
 
+       // if(blah=1){break;}
+
+    if(takki == 0 || oldtakki == 0){
+      yttatakka:
+      dchaegri->setSpeed(0);
+      dcvinstri->setSpeed(0);
+      delay(30);
+      servoarmur.write(120);
+      delay(30);
+      lokMotor->setSpeed(250);
+      lokMotor->run(BACKWARD);
+      delay(1000);
+      lokMotor->setSpeed(0);
+      delay(2000);
+      lokMotor->setSpeed(250);
+      lokMotor->run(FORWARD);
+      delay(400);
+      lokMotor->setSpeed(0);
+      break;
+    }
       //ef takkahjol er fyrir utan braut
       if(takkihjol == 0 && oldtakkihjol == 0){
-        //ef ljosastaur skynjar a[ hann er inni 
+        //setjum takkann adeins nedar ef buinn ad vera ad i 4 sek
+        if(timi>4000){
+          servoarmur.write(2);
+          delay(600);
+        }
+        //ef ljosastaur skynjar ad hann er inni 
         if(abs(Sensorljosastaur- ljosastaurgildi) <= 2 && abs(Sensorljosastaurold- ljosastaurgildi) <= 2){
           servobeygja.write(80);
           delay(150);
@@ -469,23 +504,69 @@ while(1){
         //annars ef hann er utaf
         else
         {
+                //fyrstu thrju skipti bakkar
+                if(counter<2){
                 dcvinstri->setSpeed(0);
                 dchaegri->setSpeed(0);
                 delay(35);
                 servobeygja.write(60);
                 delay(35);
                 servoarmur.write(120);
-                delay(40);
+                delay(600);
                 dcvinstri->setSpeed(90);
                 dchaegri->setSpeed(90);
                 dcvinstri->run(BACKWARD);
                 dchaegri->run(BACKWARD);
-                delay(700);
+                delay(700); 
                 dcvinstri->setSpeed(0);
                 dchaegri->setSpeed(0);
+                delay(35);
+                servobeygja.write(80);
                 delay(30);
-               servoarmur.write(5);
+                if(timi>4000){
+                  servoarmur.write(2);
+                }
+                else{servoarmur.write(5);}
                 delay(600);
+                counter=counter+1;
+                }
+                //fjorda hvert skipti fer afram og beygir til vinstri
+                else{
+                  dcvinstri->setSpeed(0);
+                dchaegri->setSpeed(0);
+                delay(35);
+                servobeygja.write(100);
+                delay(35);
+                servoarmur.write(120);
+                delay(600);
+                dcvinstri->setSpeed(90);
+                dchaegri->setSpeed(90);
+                dcvinstri->run(FORWARD);
+                dchaegri->run(FORWARD);
+                timataka2=millis();
+                while(timi2 < 700){
+                  timi2=millis()-timataka;
+                  takki = digitalRead(pushbutton2);
+                  if(takki == 0){
+                    goto yttatakka;
+                  }
+                  }
+                  /*
+                  dcvinstri->setSpeed(0);
+                dchaegri->setSpeed(0);
+                delay(35);
+                servobeygja.write(80);
+                delay(35);
+                } */
+                dcvinstri->setSpeed(0);
+                dchaegri->setSpeed(0);
+                delay(35);
+                servobeygja.write(80);
+                delay(30);
+                servoarmur.write(5);
+                delay(600);
+                counter=0;
+                } 
         }
       }
       // ef takkahjol er fyrir innan braut
@@ -506,168 +587,13 @@ while(1){
         servobeygja.write(73);
      }
 
-    if(takki == 0 && oldtakki == 0){
-      dchaegri->setSpeed(0);
-      dcvinstri->setSpeed(0);
-      delay(30);
-      servoarmur.write(120);
-      break;
-    }
+
     
     Sensorljosastaurold=Sensorljosastaur;
     oldtakkihjol=takkihjol;
-    oldtakki=takki;
+   oldtakki=takki;
   
 }
-
-/*
-while(1){
-      //rettir sig af
-          Serial.println("while lykkja 8");
-        delay(35); // Wait 40ms between pings (about 20 pings/sec). 29ms should be the shortest delay
-        duration = sonaraftanvinstri.ping();// Send ping, get ping time in microseconds 
-        Sensoraftanvinstri = duration/US_ROUNDTRIP_CM;// convert time into distance
-        duration = sonaraftanhaegri.ping();// Send ping, get ping time in microseconds 
-        Sensoraftanhaegri = duration/US_ROUNDTRIP_CM;// convert time into distance
-        
-          Serial.println(Sensorljosastaur);
-          Serial.println(Sensorframanmidja);
-          Serial.println(Sensorframanvinstri);
-          
-        if(Sensoraftanhaegriold > 40 && Sensoraftanhaegri >40 ){
-          servobeygja.write(72);
-          dcvinstri->setSpeed(0);
-          dchaegri->setSpeed(0);
-          delay(2000);
-          dcvinstri->setSpeed(85);
-          dchaegri->setSpeed(85);
-          break;
-          }
-          Sensoraftanhaegriold=Sensoraftanhaegri;
-}
-
-while(1){
-      //keyrir ad brun
-          Serial.println("while lykkja 8");
-          delay(35); // Wait 40ms between pings (about 20 pings/sec). 29ms should be the shortest delay
-          duration = sonarljosastaur.ping();// Send ping, get ping time in microseconds 
-          Sensorljosastaur = duration/US_ROUNDTRIP_CM;// convert time into distance
-          servoarmur.write(3);
-        
-          Serial.println(Sensorljosastaur);
-          Serial.println(Sensorframanmidja);
-          Serial.println(Sensorframanvinstri);
-          
-        if(Sensorljosastaur >35 && Sensorljosastaurold >35 ){
-
-          dcvinstri->setSpeed(0);
-          dchaegri->setSpeed(0);
-          delay(25);
-          servobeygja.write(120);
-          delay(1000);
-          dcvinstri->setSpeed(120);
-          dchaegri->setSpeed(120);
-          dcvinstri->run(FORWARD);
-          dchaegri->run(FORWARD);
-          break;
-          }
-          Sensorljosastaurold=Sensorljosastaur;
-          
-}
-while(1){
-      //keyrir ad brun
-          Serial.println("while lykkja 8");
-          delay(35); // Wait 40ms between pings (about 20 pings/sec). 29ms should be the shortest delay
-          duration = sonarljosastaur.ping();// Send ping, get ping time in microseconds 
-          Sensorljosastaur = duration/US_ROUNDTRIP_CM;// convert time into distance
-          int statehjol = digitalRead(takkihjol);
-          int statetakki = digitalRead(takki);
-        
-          Serial.println(Sensorljosastaur);
-          Serial.println(Sensorframanmidja);
-          Serial.println(Sensorframanvinstri);
-          
-        if(statehjol==0){
-          dcvinstri->setSpeed(0);
-          dchaegri->setSpeed(0);
-          servoarmur.write(120);
-          servobeygja.write(79);
-          delay(10000);
-          dcvinstri->setSpeed(200);
-          dchaegri->setSpeed(0);
-          dcvinstri->run(BACKWARD);
-          dchaegri->run(FORWARD);
-          delay(500);
-          dcvinstri->setSpeed(0);
-          dchaegri->setSpeed(0);
-
-          break;
-          }
-          Sensorljosastaurold=Sensorljosastaur;
-          
-}
-/*
-while(1){
-      //rettir sig af þegar beinn
-          Serial.println("while lykkja 9");
-          delay(30); // Wait 40ms between pings (about 20 pings/sec). 29ms should be the shortest delay
-        duration = sonaraftanvinstri.ping();// Send ping, get ping time in microseconds 
-        Sensoraftanvinstri = duration/US_ROUNDTRIP_CM;// convert time into distance
-        duration = sonaraftanhaegri.ping();// Send ping, get ping time in microseconds 
-        Sensoraftanhaegri = duration/US_ROUNDTRIP_CM;// convert time into distance
-        
-          Serial.println(Sensorljosastaur);
-          Serial.println(Sensorframanmidja);
-          Serial.println(Sensorframanvinstri);
-          Serial.println("Mismunur a fjarlaegdum" + Sensoraftanvinstri-Sensoraftanhaegri);
-
-        if(Sensoraftanvinstri<85 && Sensoraftanvinstriold<85 && Sensoraftanvinstri-Sensoraftanhaegri <1 && Sensoraftanvinstriold-Sensoraftanhaegriold <1 && Sensoraftanhaegriold !=0 && Sensoraftanhaegri !=0 ){
-          dcvinstri->setSpeed(0);
-          dchaegri->setSpeed(0);
-          servobeygja.write(82);
-          delay(25);
-          servoarmur.write(0);
-          delay(4000);
-          dcvinstri->setSpeed(85);
-          dchaegri->setSpeed(85);
-          dcvinstri->run(FORWARD);
-          dchaegri->run(FORWARD);
-          break;
-          }
-          Sensoraftanhaegriold=Sensoraftanhaegri;
-          Sensoraftanvinstriold=Sensoraftanvinstri;
-
-
-          
-}
-
-while(1){
-      //keyrir ad brun
-          Serial.println("while lykkja 8");
-          delay(35); // Wait 40ms between pings (about 20 pings/sec). 29ms should be the shortest delay
-        duration = sonarljosastaur.ping();// Send ping, get ping time in microseconds 
-        Sensorljosastaur = duration/US_ROUNDTRIP_CM;// convert time into distance
-        
-          Serial.println(Sensorljosastaur);
-          Serial.println(Sensorframanmidja);
-          Serial.println(Sensorframanvinstri);
-          
-        if(Sensorljosastaur <40 && Sensorljosastaurold <40){
-          dcvinstri->setSpeed(0);
-          dchaegri->setSpeed(0);
-          delay(10000);
-          dcvinstri->setSpeed(80);
-          dchaegri->setSpeed(80);
-          dcvinstri->run(FORWARD);
-          dchaegri->run(FORWARD);
-          break;
-          }
-          Sensorljosastaurold=Sensorljosastaur;
-          
-}
-
-*/
-
 
 }
 //
@@ -675,3 +601,18 @@ void loop() {
   // put your main code here, to run repeatedly:
 
 }
+/*
+void losabolta() {
+      dchaegri->setSpeed(0);
+      dcvinstri->setSpeed(0);
+      delay(30);
+      servoarmur.write(120);
+      delay(30);
+      lokMotor->setSpeed(50);
+      lokMotor->run(BACKWARD);
+      delay(400);
+      lokMotor->setSpeed(0);
+      blah=1;
+      noInterrupts();
+}*/
+
