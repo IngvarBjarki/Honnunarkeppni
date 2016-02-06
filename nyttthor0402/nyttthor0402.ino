@@ -18,7 +18,10 @@
 
 int pushbutton = 3; //a hjoli
 int pushbutton2 = 2; // takki a hlid
+float hradafasti=1;
+float timafasti=1;
 
+int counter2 =0;
 int ljosastaurgildi=30;
 int counter=0;
 int timataka2;
@@ -55,7 +58,7 @@ void setup()
   servoarmur.attach(9);  
   servobeygja.attach(10);  
   delay(15);
-  servoarmur.write(120);
+  servoarmur.write(100);
   delay(15);
   dcvinstri->setSpeed(80);
   dchaegri->setSpeed(80);
@@ -379,10 +382,11 @@ while(1){
 
 }
 
-
+timataka=millis();
 while(1){
       //rettir sig af,   beygir til vinstri
           Serial.println("while lykkja 8");
+          timi=millis()-timataka;
         delay(50); // Wait 40ms between pings (about 20 pings/sec). 29ms should be the shortest delay
         duration = sonaraftanvinstri.ping();// Send ping, get ping time in microseconds 
         Sensoraftanvinstri = duration/US_ROUNDTRIP_CM;// convert time into distance
@@ -447,7 +451,6 @@ while(1){
 }
 
 timataka=millis();
-
 //nidri med arminn rettir sig af
 while(1){
         Serial.println("while lykkja 9");
@@ -471,12 +474,12 @@ while(1){
 
        // if(blah=1){break;}
 
-    if(takki == 0 || oldtakki == 0){
+    if(takki == 0 || oldtakki == 0 ){
       yttatakka:
       dchaegri->setSpeed(0);
       dcvinstri->setSpeed(0);
       delay(30);
-      servoarmur.write(120);
+      servoarmur.write(100);
       delay(30);
       lokMotor->setSpeed(250);
       lokMotor->run(BACKWARD);
@@ -487,7 +490,14 @@ while(1){
       lokMotor->run(FORWARD);
       delay(400);
       lokMotor->setSpeed(0);
+      delay(30);
+        servobeygja.write(81); /// mikilvaegt horn fra korfu !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+       delay(30);
       break;
+    }
+    if(35<Sensorljosastaur && Sensorljosastaur < 55){
+      delay(300);
+      goto yttatakka;
     }
       //ef takkahjol er fyrir utan braut
       if(takkihjol == 0 && oldtakkihjol == 0){
@@ -504,6 +514,10 @@ while(1){
         //annars ef hann er utaf
         else
         {
+                if(counter2>6){
+                   servobeygja.write(80);
+                    delay(150);
+                }
                 //fyrstu thrju skipti bakkar
                 if(counter<2){
                 dcvinstri->setSpeed(0);
@@ -511,7 +525,7 @@ while(1){
                 delay(35);
                 servobeygja.write(60);
                 delay(35);
-                servoarmur.write(120);
+                servoarmur.write(100);
                 delay(600);
                 dcvinstri->setSpeed(90);
                 dchaegri->setSpeed(90);
@@ -537,7 +551,7 @@ while(1){
                 delay(35);
                 servobeygja.write(100);
                 delay(35);
-                servoarmur.write(120);
+                servoarmur.write(100);
                 delay(600);
                 dcvinstri->setSpeed(90);
                 dchaegri->setSpeed(90);
@@ -551,13 +565,7 @@ while(1){
                     goto yttatakka;
                   }
                   }
-                  /*
-                  dcvinstri->setSpeed(0);
-                dchaegri->setSpeed(0);
-                delay(35);
-                servobeygja.write(80);
-                delay(35);
-                } */
+
                 dcvinstri->setSpeed(0);
                 dchaegri->setSpeed(0);
                 delay(35);
@@ -566,7 +574,8 @@ while(1){
                 servoarmur.write(5);
                 delay(600);
                 counter=0;
-                } 
+                }
+                counter2=counter2+1;     
         }
       }
       // ef takkahjol er fyrir innan braut
@@ -595,6 +604,55 @@ while(1){
   
 }
 
+//fra korfu ad hlidi !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+timataka=millis();
+  while(1){
+    Serial.println("while lykkja 1");
+    timi=millis()-timataka;
+    //delay(50);
+    //duration = sonaraftanhaegri.ping();// Send ping, get ping time in microseconds 
+    //Sensoraftanhaegri = duration/US_ROUNDTRIP_CM;// convert time into 
+    dcvinstri->setSpeed(80*hradafasti);
+    dchaegri->setSpeed(80*hradafasti);
+    dcvinstri->run(FORWARD);
+    dchaegri->run(FORWARD);
+    if(timi > 3500*timafasti){
+             dcvinstri->setSpeed(0);
+       dchaegri->setSpeed(0);
+      delay(30);
+      servobeygja.write(70);
+      delay(30);
+      break;
+    }
+  }
+  timataka=millis();
+  while(1){
+    Serial.println("while lykkja 2");
+        timi=millis()-timataka;
+    dcvinstri->setSpeed(80*hradafasti);
+    dchaegri->setSpeed(80*hradafasti);
+    dcvinstri->run(FORWARD);
+    dchaegri->run(FORWARD);
+    if(timi > 1500*timafasti){
+       dcvinstri->setSpeed(0);
+       dchaegri->setSpeed(0);
+      delay(30);
+      servobeygja.write(80);
+      delay(30);
+      break;
+    }
+  }
+
+  while(1){
+    Serial.println("while lykkja 3");
+    dcvinstri->setSpeed(80*hradafasti);
+    dchaegri->setSpeed(80*hradafasti);
+    dcvinstri->run(FORWARD);
+    dchaegri->run(FORWARD);
+  }
+  
+  
+    
 }
 //
 void loop() {
@@ -606,7 +664,7 @@ void losabolta() {
       dchaegri->setSpeed(0);
       dcvinstri->setSpeed(0);
       delay(30);
-      servoarmur.write(120);
+      servoarmur.write(100);
       delay(30);
       lokMotor->setSpeed(50);
       lokMotor->run(BACKWARD);
