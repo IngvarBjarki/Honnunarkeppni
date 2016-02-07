@@ -24,6 +24,7 @@ float timafasti=1;
 int counter2 =0;
 int ljosastaurgildi=30;
 int counter=0;
+int counter3=0;
 int timataka2;
 int timi2=0;
 int timataka,timi;
@@ -56,7 +57,7 @@ void setup()
   int oldtakki = 1; //= digitalRead(pushbutton2);  
   //pinMode(2, INPUT); 
   AFMS.begin(2000);
-  delay(30);
+  delay(10000);
   servoarmur.attach(9);  
   servobeygja.attach(10);  
   delay(15);
@@ -127,7 +128,7 @@ void setup()
         Serial.println(Sensorframanvinstri);
                  
 //Ef skynjar súlu með takka í minna en 60 cm fjarlægð
-        if(Sensorframanvinstri <60 && Sensorframanvinstri >5 && Sensorframanvinstriold <60 && Sensorframanvinstriold >5 && Sensorframanhaegri <60 && Sensorframanhaegri >5 && Sensorframanhaegriold <60 && Sensorframanhaegriold >5 || Sensorframanmidja <60 && Sensorframanmidja >1 && Sensorframanmidjaold <60 && Sensorframanmidjaold >1 && Sensorframanvinstri <60 && Sensorframanvinstri >5 && Sensorframanvinstriold <60 && Sensorframanvinstriold >5 || Sensorframanmidja <60 && Sensorframanmidja >1 && Sensorframanmidjaold <60 && Sensorframanmidjaold >1 && Sensorframanhaegri <60 && Sensorframanhaegri >5 && Sensorframanhaegriold <60 && Sensorframanhaegriold >5  ){
+        if(Sensorframanvinstri <57 && Sensorframanvinstri >5 && Sensorframanvinstriold <57 && Sensorframanvinstriold >5 && Sensorframanhaegri <57 && Sensorframanhaegri >5 && Sensorframanhaegriold <57 && Sensorframanhaegriold >5 || Sensorframanmidja <57 && Sensorframanmidja >1 && Sensorframanmidjaold <57 && Sensorframanmidjaold >1 && Sensorframanvinstri <57 && Sensorframanvinstri >5 && Sensorframanvinstriold <57 && Sensorframanvinstriold >5 || Sensorframanmidja <57 && Sensorframanmidja >1 && Sensorframanmidjaold <57 && Sensorframanmidjaold >1 && Sensorframanhaegri <57 && Sensorframanhaegri >5 && Sensorframanhaegriold <57 && Sensorframanhaegriold >5  ){
             Serial.println("Sensorframanhaegri");
             Serial.println(Sensorframanhaegri);
             Serial.println("Sensorframanhaegriold");
@@ -226,7 +227,7 @@ timataka=millis();
       Serial.println(Sensorframanvinstri);
       
 // skynjum suluna. passa ad ALLIR skynjarar seu lengra en 37cm fra sulu
-        if(Sensorframanhaegri >35 && Sensorframanhaegriold >35 && Sensorframanmidja >35 && Sensorframanmidjaold >35 && Sensorframanvinstri>35  && Sensorframanvinstriold>35){
+        if(Sensorframanhaegri >36 && Sensorframanhaegriold >36 && Sensorframanmidja >36 && Sensorframanmidjaold >36 && Sensorframanvinstri>36  && Sensorframanvinstriold>36){
         Serial.println(Sensorframanhaegri);
         Serial.println(Sensorframanmidja);
         Serial.println(Sensorframanvinstri);
@@ -343,8 +344,28 @@ while(1){
           dchaegri->run(FORWARD);
           break;
           }
-          //ef of langur timi lidur tha er hann klesstur a fjaervegginn og vid bokkum og rettum okkur af til ad komast i gegn
+          //ef of langur timi lidur tha er hann klesstur a fjaervegginn og vid bokkum og rettum okkur af til ad komast i gegn bakkupp 33231231132222222333333333333333333333333333333333333
           else if(timi>8000){
+            if (Sensorframanhaegri!=0 &&Sensorframanhaegri<7 &&Sensorframanvinstri!=0 && Sensorframanvinstri>20){
+               dcvinstri->setSpeed(0);
+          dchaegri->setSpeed(0);
+          servobeygja.write(63);
+          dcvinstri->setSpeed(90);
+          dchaegri->setSpeed(90);
+          dcvinstri->run(BACKWARD);
+          dchaegri->run(BACKWARD);
+          delay(500);
+          dcvinstri->setSpeed(0);
+          dchaegri->setSpeed(0);
+          servobeygja.write(80);
+          delay(35);
+          dcvinstri->setSpeed(90);
+          dchaegri->setSpeed(90);
+          dcvinstri->run(FORWARD);
+          dchaegri->run(FORWARD);
+            }
+            else{
+            if (counter3==0){
           dcvinstri->setSpeed(0);
           dchaegri->setSpeed(0);
           servobeygja.write(100);
@@ -361,9 +382,32 @@ while(1){
           dchaegri->setSpeed(90);
           dcvinstri->run(FORWARD);
           dchaegri->run(FORWARD);
+          counter3=counter3+1;
+            }
+            else{
+          dcvinstri->setSpeed(0);
+          dchaegri->setSpeed(0);
+          servobeygja.write(80);
+          dcvinstri->setSpeed(90);
+          dchaegri->setSpeed(90);
+          dcvinstri->run(BACKWARD);
+          dchaegri->run(BACKWARD);
+          delay(500);
+          dcvinstri->setSpeed(0);
+          dchaegri->setSpeed(0);
+          servobeygja.write(60);
+          delay(35);
+          dcvinstri->setSpeed(90);
+          dchaegri->setSpeed(90);
+          dcvinstri->run(FORWARD);
+          dchaegri->run(FORWARD);
+          counter3=0;
+            }
+            }
           }
+          
           //eda ljosastaur skynjar ad hann er ad keyra utaf
-          if(abs(Sensorljosastaur- ljosastaurgildi) > 2 && abs(Sensorljosastaurold- ljosastaurgildi) > 2 &&timi>2000){
+          if(Sensorljosastaur > ljosastaurgildi+2 &&timi>2000){
                 dcvinstri->setSpeed(0);
                 dchaegri->setSpeed(0);
                 delay(35);
@@ -386,6 +430,7 @@ while(1){
 
 }
 
+counter3=0;
 timataka=millis();
 while(1){
       //rettir sig af,   beygir til vinstri
@@ -415,6 +460,7 @@ while(1){
           }
           //ef of langur timi lidur tha er hann klesstur a fjaervegginn og vid bokkum og rettum okkur af til ad komast i gegn
           else if(timi>7000){
+if (counter3==0){
           dcvinstri->setSpeed(0);
           dchaegri->setSpeed(0);
           servobeygja.write(100);
@@ -422,16 +468,40 @@ while(1){
           dchaegri->setSpeed(90);
           dcvinstri->run(BACKWARD);
           dchaegri->run(BACKWARD);
-          delay(1200);
+          delay(500);
           dcvinstri->setSpeed(0);
           dchaegri->setSpeed(0);
           servobeygja.write(80);
           delay(35);
-
+          dcvinstri->setSpeed(90);
+          dchaegri->setSpeed(90);
+          dcvinstri->run(FORWARD);
+          dchaegri->run(FORWARD);
+          counter3=counter3+1;
+            }
+            else{
+          dcvinstri->setSpeed(0);
+          dchaegri->setSpeed(0);
+          servobeygja.write(80);
+          dcvinstri->setSpeed(90);
+          dchaegri->setSpeed(90);
+          dcvinstri->run(BACKWARD);
+          dchaegri->run(BACKWARD);
+          delay(500);
+          dcvinstri->setSpeed(0);
+          dchaegri->setSpeed(0);
+          servobeygja.write(60);
+          delay(35);
+          dcvinstri->setSpeed(90);
+          dchaegri->setSpeed(90);
+          dcvinstri->run(FORWARD);
+          dchaegri->run(FORWARD);
+          counter3=0;
+            }
           }
 
           //ef ljosastaurinn fer framaf
-                if(abs(Sensorljosastaur- ljosastaurgildi) > 2 && abs(Sensorljosastaurold- ljosastaurgildi) > 2){
+                if(Sensorljosastaur- ljosastaurgildi > 2){
                 dcvinstri->setSpeed(0);
                 dchaegri->setSpeed(0);
                 delay(35);
@@ -475,6 +545,31 @@ while(1){
           
         takkihjol = digitalRead(pushbutton);
         takki = digitalRead(pushbutton2);
+    if (timi>30000){
+                dcvinstri->setSpeed(0);
+                dchaegri->setSpeed(0);
+                delay(35);
+                servobeygja.write(100);
+                delay(35);
+                servoarmur.write(100);
+                delay(700);
+                dcvinstri->setSpeed(90);
+                dchaegri->setSpeed(90);
+                dcvinstri->run(BACKWARD);
+                dchaegri->run(BACKWARD);
+                delay(1500);
+                dcvinstri->setSpeed(0);
+                dchaegri->setSpeed(0);
+                delay(35);
+                servobeygja.write(80);
+                delay(35);
+                dcvinstri->setSpeed(90);
+                dchaegri->setSpeed(90);
+                dcvinstri->run(BACKWARD);
+                dchaegri->run(BACKWARD);
+                delay(1500);
+                servoarmur.write(5);
+    }
 
     if(takki == 0 || oldtakki == 0 ){
       yttatakka:
@@ -493,7 +588,7 @@ while(1){
       delay(400);
       lokMotor->setSpeed(0);
       delay(30);
-      servobeygja.write(89); /// mikilvaegt horn fra korfu !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+      servobeygja.write(88); /// mikilvaegt horn fra korfu !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
      //servobeygja.write(95);
        delay(30);
       break;
@@ -505,7 +600,7 @@ while(1){
       //ef takkahjol er fyrir utan braut
       if(takkihjol == 0 && oldtakkihjol == 0){
         //setjum takkann adeins nedar ef buinn ad vera ad i 4 sek
-        if(timi>4000){
+        if(timi>8000){
           servoarmur.write(1);
           delay(600);
         }
